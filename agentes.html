@@ -338,6 +338,66 @@
       color: #fff;
     }
 
+    .card-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chatgpt-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.25s;
+      color: #fff;
+      background: #10a37f;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .chatgpt-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(16,163,127,0.4);
+    }
+
+    .chatgpt-btn:focus-visible { outline: 2px solid #10a37f; outline-offset: 3px; }
+
+    .chatgpt-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .copy-btn-secondary {
+      background: transparent !important;
+      border: 1px solid var(--border-subtle) !important;
+      color: var(--text-secondary) !important;
+      font-size: 0.8rem !important;
+      padding: 10px !important;
+      font-weight: 500 !important;
+    }
+
+    .copy-btn-secondary:hover {
+      border-color: rgba(255,255,255,0.15) !important;
+      color: var(--text-primary) !important;
+      box-shadow: none !important;
+    }
+
+    .chatgpt-btn-soon {
+      background: rgba(16,163,127,0.15) !important;
+      color: #10a37f !important;
+      border: 1px solid rgba(16,163,127,0.25);
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
     /* ── HOW TO USE ── */
     .how-to {
       padding: 60px 24px;
@@ -487,10 +547,16 @@
         <span class="tag">Score 0-100</span>
         <span class="tag">Anti-ICP</span>
       </div>
-      <button class="copy-btn" data-agent="icp" aria-label="Copiar prompt do ICP Architect">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar Prompt
-      </button>
+      <div class="card-buttons">
+        <a href="https://chatgpt.com/g/g-69d9cb32c5c08191987a032c153b73c8-icp-architect" target="_blank" rel="noopener" class="chatgpt-btn" aria-label="Abrir ICP Architect no ChatGPT">
+          <svg viewBox="0 0 24 24"><path d="M22.2 14.34a5.48 5.48 0 00-.47-4.49 5.55 5.55 0 00-5.98-2.65 5.48 5.48 0 00-4.13-1.84 5.55 5.55 0 00-5.3 3.84 5.48 5.48 0 00-3.66 2.66 5.55 5.55 0 00.68 6.51 5.48 5.48 0 00.47 4.49 5.55 5.55 0 005.98 2.65 5.48 5.48 0 004.13 1.84 5.55 5.55 0 005.3-3.84 5.48 5.48 0 003.66-2.66 5.55 5.55 0 00-.68-6.51zM15.67 21.2a4.14 4.14 0 01-2.67.98c-.97 0-1.91-.35-2.65-1l.13-.07 4.4-2.54a.72.72 0 00.36-.62v-6.2l1.86 1.07a.07.07 0 01.04.05v5.13a4.16 4.16 0 01-1.47 3.2zm-12.2-2.94a4.14 4.14 0 01-.5-2.79l.13.08 4.4 2.54a.72.72 0 00.72 0l5.37-3.1v2.14a.07.07 0 01-.03.06l-4.45 2.57a4.16 4.16 0 01-5.64-1.5zm-1.59-9.65a4.14 4.14 0 012.17-1.82v5.23a.72.72 0 00.36.62l5.37 3.1-1.86 1.07a.07.07 0 01-.06 0l-4.45-2.57A4.16 4.16 0 011.88 8.6zm20.96 4.88l-5.37-3.1 1.86-1.07a.07.07 0 01.06 0l4.45 2.57a4.16 4.16 0 01-1.58 7.58v-5.36a.72.72 0 00-.36-.62h-.06zm1.85-2.82l-.13-.08-4.4-2.54a.72.72 0 00-.72 0l-5.37 3.1V8.99a.07.07 0 01.03-.06l4.45-2.57a4.16 4.16 0 016.14 4.31zM9.48 14.54l-1.86-1.07a.07.07 0 01-.04-.05V8.29a4.16 4.16 0 016.82-3.2l-.13.07-4.4 2.54a.72.72 0 00-.36.62l-.03 6.22zm1.01-2.18l2.39-1.38 2.39 1.38v2.76l-2.39 1.38-2.39-1.38v-2.76z"/></svg>
+          Abrir no ChatGPT
+        </a>
+        <button class="copy-btn copy-btn-secondary" data-agent="icp" aria-label="Copiar prompt do ICP Architect">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar prompt manualmente
+        </button>
+      </div>
     </article>
 
     <article class="agent-card reveal" data-accent="2" data-agent="captacao">
@@ -508,10 +574,16 @@
         <span class="tag">LinkedIn msgs</span>
         <span class="tag">Anuncios</span>
       </div>
-      <button class="copy-btn" data-agent="captacao" aria-label="Copiar prompt do Captador Pro">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar Prompt
-      </button>
+      <div class="card-buttons">
+        <a href="https://chatgpt.com/g/g-69d9d22bc6e881919b535d48bcf3f9ec-captador-pro" target="_blank" rel="noopener" class="chatgpt-btn" aria-label="Abrir Captador Pro no ChatGPT">
+          <svg viewBox="0 0 24 24"><path d="M22.2 14.34a5.48 5.48 0 00-.47-4.49 5.55 5.55 0 00-5.98-2.65 5.48 5.48 0 00-4.13-1.84 5.55 5.55 0 00-5.3 3.84 5.48 5.48 0 00-3.66 2.66 5.55 5.55 0 00.68 6.51 5.48 5.48 0 00.47 4.49 5.55 5.55 0 005.98 2.65 5.48 5.48 0 004.13 1.84 5.55 5.55 0 005.3-3.84 5.48 5.48 0 003.66-2.66 5.55 5.55 0 00-.68-6.51zM15.67 21.2a4.14 4.14 0 01-2.67.98c-.97 0-1.91-.35-2.65-1l.13-.07 4.4-2.54a.72.72 0 00.36-.62v-6.2l1.86 1.07a.07.07 0 01.04.05v5.13a4.16 4.16 0 01-1.47 3.2zm-12.2-2.94a4.14 4.14 0 01-.5-2.79l.13.08 4.4 2.54a.72.72 0 00.72 0l5.37-3.1v2.14a.07.07 0 01-.03.06l-4.45 2.57a4.16 4.16 0 01-5.64-1.5zm-1.59-9.65a4.14 4.14 0 012.17-1.82v5.23a.72.72 0 00.36.62l5.37 3.1-1.86 1.07a.07.07 0 01-.06 0l-4.45-2.57A4.16 4.16 0 011.88 8.6zm20.96 4.88l-5.37-3.1 1.86-1.07a.07.07 0 01.06 0l4.45 2.57a4.16 4.16 0 01-1.58 7.58v-5.36a.72.72 0 00-.36-.62h-.06zm1.85-2.82l-.13-.08-4.4-2.54a.72.72 0 00-.72 0l-5.37 3.1V8.99a.07.07 0 01.03-.06l4.45-2.57a4.16 4.16 0 016.14 4.31zM9.48 14.54l-1.86-1.07a.07.07 0 01-.04-.05V8.29a4.16 4.16 0 016.82-3.2l-.13.07-4.4 2.54a.72.72 0 00-.36.62l-.03 6.22zm1.01-2.18l2.39-1.38 2.39 1.38v2.76l-2.39 1.38-2.39-1.38v-2.76z"/></svg>
+          Abrir no ChatGPT
+        </a>
+        <button class="copy-btn copy-btn-secondary" data-agent="captacao" aria-label="Copiar prompt do Captador Pro">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar prompt manualmente
+        </button>
+      </div>
     </article>
 
     <article class="agent-card reveal" data-accent="3" data-agent="conversao">
@@ -529,10 +601,16 @@
         <span class="tag">Aquecimento 7d</span>
         <span class="tag">Metricas</span>
       </div>
-      <button class="copy-btn" data-agent="conversao" aria-label="Copiar prompt do Conversor">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar Prompt
-      </button>
+      <div class="card-buttons">
+        <a href="https://chatgpt.com/g/g-69d9d2ad3bb08191aed2060563c60361-conversor-de-leads" target="_blank" rel="noopener" class="chatgpt-btn" aria-label="Abrir Conversor no ChatGPT">
+          <svg viewBox="0 0 24 24"><path d="M22.2 14.34a5.48 5.48 0 00-.47-4.49 5.55 5.55 0 00-5.98-2.65 5.48 5.48 0 00-4.13-1.84 5.55 5.55 0 00-5.3 3.84 5.48 5.48 0 00-3.66 2.66 5.55 5.55 0 00.68 6.51 5.48 5.48 0 00.47 4.49 5.55 5.55 0 005.98 2.65 5.48 5.48 0 004.13 1.84 5.55 5.55 0 005.3-3.84 5.48 5.48 0 003.66-2.66 5.55 5.55 0 00-.68-6.51z"/></svg>
+          Abrir no ChatGPT
+        </a>
+        <button class="copy-btn copy-btn-secondary" data-agent="conversao" aria-label="Copiar prompt do Conversor">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar prompt manualmente
+        </button>
+      </div>
     </article>
 
     <article class="agent-card reveal" data-accent="4" data-agent="vendas">
@@ -550,10 +628,16 @@
         <span class="tag">Proposta 9 slides</span>
         <span class="tag">Objecoes</span>
       </div>
-      <button class="copy-btn" data-agent="vendas" aria-label="Copiar prompt do Closer">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar Prompt
-      </button>
+      <div class="card-buttons">
+        <a href="#" target="_blank" rel="noopener" class="chatgpt-btn chatgpt-btn-soon" aria-label="Closer em breve no ChatGPT">
+          <svg viewBox="0 0 24 24"><path d="M22.2 14.34a5.48 5.48 0 00-.47-4.49 5.55 5.55 0 00-5.98-2.65 5.48 5.48 0 00-4.13-1.84 5.55 5.55 0 00-5.3 3.84 5.48 5.48 0 00-3.66 2.66 5.55 5.55 0 00.68 6.51 5.48 5.48 0 00.47 4.49 5.55 5.55 0 005.98 2.65 5.48 5.48 0 004.13 1.84 5.55 5.55 0 005.3-3.84 5.48 5.48 0 003.66-2.66 5.55 5.55 0 00-.68-6.51z"/></svg>
+          Em breve no ChatGPT
+        </a>
+        <button class="copy-btn copy-btn-secondary" data-agent="vendas" aria-label="Copiar prompt do Closer">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar prompt manualmente
+        </button>
+      </div>
     </article>
 
     <article class="agent-card reveal" data-accent="5" data-agent="pos-venda">
@@ -571,10 +655,16 @@
         <span class="tag">Upsell</span>
         <span class="tag">Anti-churn</span>
       </div>
-      <button class="copy-btn" data-agent="pos-venda" aria-label="Copiar prompt do Retentor">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar Prompt
-      </button>
+      <div class="card-buttons">
+        <a href="#" target="_blank" rel="noopener" class="chatgpt-btn chatgpt-btn-soon" aria-label="Retentor em breve no ChatGPT">
+          <svg viewBox="0 0 24 24"><path d="M22.2 14.34a5.48 5.48 0 00-.47-4.49 5.55 5.55 0 00-5.98-2.65 5.48 5.48 0 00-4.13-1.84 5.55 5.55 0 00-5.3 3.84 5.48 5.48 0 00-3.66 2.66 5.55 5.55 0 00.68 6.51 5.48 5.48 0 00.47 4.49 5.55 5.55 0 005.98 2.65 5.48 5.48 0 004.13 1.84 5.55 5.55 0 005.3-3.84 5.48 5.48 0 003.66-2.66 5.55 5.55 0 00-.68-6.51z"/></svg>
+          Em breve no ChatGPT
+        </a>
+        <button class="copy-btn copy-btn-secondary" data-agent="pos-venda" aria-label="Copiar prompt do Retentor">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar prompt manualmente
+        </button>
+      </div>
     </article>
 
   </section>
@@ -590,11 +680,11 @@
         </div>
         <div class="step-box reveal">
           <div class="step-box-num">2</div>
-          <p><strong>Copie</strong> o prompt clicando no botao</p>
+          <p><strong>Clique</strong> em "Abrir no ChatGPT"</p>
         </div>
         <div class="step-box reveal">
           <div class="step-box-num">3</div>
-          <p><strong>Abra</strong> o ChatGPT e cole na conversa</p>
+          <p><strong>Converse</strong> com o agente direto no ChatGPT</p>
         </div>
         <div class="step-box reveal">
           <div class="step-box-num">4</div>
