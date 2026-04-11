@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Laboratorio de IA para Vendas — Ative agentes de IA para definir seu nicho e vender mais.">
+  <title>Laboratorio IA para Vendas — Agentes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #06060B;
+      --bg-section: #0C0C14;
+      --bg-card: #13131F;
+      --bg-card-hover: #1A1A2E;
+      --text-primary: #F5F5F7;
+      --text-secondary: #8A8A9A;
+      --text-dim: #55556A;
+      --accent-1: #6C63FF;
+      --accent-2: #00D4AA;
+      --accent-3: #FF6B6B;
+      --accent-4: #FFD93D;
+      --accent-5: #4ECDC4;
+      --border-subtle: rgba(255,255,255,0.06);
+      --font-heading: 'Syne', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --glow-spread: 80px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(108,99,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(108,99,255,0.1);
+      border: 1px solid rgba(108,99,255,0.2);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-1);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-1);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(108,99,255,0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(108,99,255,0); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5.5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-secondary);
+      max-width: 440px;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-count {
+      display: flex;
+      gap: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-count div {
+      text-align: center;
+    }
+
+    .hero-count strong {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-count small {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── AGENT CARDS ── */
+    .agents {
+      padding: 20px 20px 60px;
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .agent-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 28px 24px;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.3s;
+    }
+
+    .agent-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+    }
+
+    .agent-card[data-accent="1"]::before { background: var(--accent-1); }
+    .agent-card[data-accent="2"]::before { background: var(--accent-2); }
+    .agent-card[data-accent="3"]::before { background: var(--accent-3); }
+    .agent-card[data-accent="4"]::before { background: var(--accent-4); }
+    .agent-card[data-accent="5"]::before { background: var(--accent-5); }
+
+    .agent-card[data-accent="1"]:hover { border-color: rgba(108,99,255,0.3); }
+    .agent-card[data-accent="2"]:hover { border-color: rgba(0,212,170,0.3); }
+    .agent-card[data-accent="3"]:hover { border-color: rgba(255,107,107,0.3); }
+    .agent-card[data-accent="4"]:hover { border-color: rgba(255,217,61,0.3); }
+    .agent-card[data-accent="5"]:hover { border-color: rgba(78,205,196,0.3); }
+
+    /* Glow effect */
+    .agent-card::after {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: var(--glow-spread);
+      height: var(--glow-spread);
+      border-radius: 50%;
+      opacity: 0.08;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .agent-card:hover::after { opacity: 0.15; }
+
+    .agent-card[data-accent="1"]::after { background: var(--accent-1); }
+    .agent-card[data-accent="2"]::after { background: var(--accent-2); }
+    .agent-card[data-accent="3"]::after { background: var(--accent-3); }
+    .agent-card[data-accent="4"]::after { background: var(--accent-4); }
+    .agent-card[data-accent="5"]::after { background: var(--accent-5); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card-step {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--bg-primary);
+      flex-shrink: 0;
+    }
+
+    .agent-card[data-accent="1"] .card-step { background: var(--accent-1); }
+    .agent-card[data-accent="2"] .card-step { background: var(--accent-2); }
+    .agent-card[data-accent="3"] .card-step { background: var(--accent-3); }
+    .agent-card[data-accent="4"] .card-step { background: var(--accent-4); color: #1a1a2e; }
+    .agent-card[data-accent="5"] .card-step { background: var(--accent-5); }
+
+    .card-title-group {
+      flex: 1;
+    }
+
+    .card-name {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .card-role {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .card-deliverables {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-dim);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.25s, background 0.2s;
+      color: var(--bg-primary);
+      position: relative;
+      z-index: 2;
+    }
+
+    .copy-btn:active { transform: scale(0.97); }
+    .copy-btn:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 3px; }
+
+    .agent-card[data-accent="1"] .copy-btn { background: var(--accent-1); }
+    .agent-card[data-accent="1"] .copy-btn:hover { box-shadow: 0 6px 24px rgba(108,99,255,0.35); }
+    .agent-card[data-accent="2"] .copy-btn { background: var(--accent-2); }
+    .agent-card[data-accent="2"] .copy-btn:hover { box-shadow: 0 6px 24px rgba(0,212,170,0.35); }
+    .agent-card[data-accent="3"] .copy-btn { background: var(--accent-3); }
+    .agent-card[data-accent="3"] .copy-btn:hover { box-shadow: 0 6px 24px rgba(255,107,107,0.35); }
+    .agent-card[data-accent="4"] .copy-btn { background: var(--accent-4); }
+    .agent-card[data-accent="4"] .copy-btn:hover { box-shadow: 0 6px 24px rgba(255,217,61,0.35); }
+    .agent-card[data-accent="5"] .copy-btn { background: var(--accent-5); }
+    .agent-card[data-accent="5"] .copy-btn:hover { box-shadow: 0 6px 24px rgba(78,205,196,0.35); }
+
+    .copy-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .copy-btn.copied {
+      background: #22c55e !important;
+      color: #fff;
+    }
+
+    /* ── HOW TO USE ── */
+    .how-to {
+      padding: 60px 24px;
+      background: var(--bg-section);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .how-to-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .how-to h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 36px;
+      letter-spacing: -0.02em;
+    }
+
+    .steps-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .step-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .step-box-num {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .step-box p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .step-box strong {
+      color: var(--text-primary);
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      z-index: 999;
+      transition: bottom 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .toast.show { bottom: 32px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    footer a {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--text-primary); }
+
+    /* ── ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity:1; transform:none; transition:none; }
+      .hero-tag::before { animation: none; }
+    }
+
+    @media (min-width: 768px) {
+      .agents { max-width: 800px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      .agent-card:last-child { grid-column: 1 / -1; max-width: 390px; justify-self: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-tag">
+      Ao vivo
+    </div>
+    <h1><span>Laboratorio</span><br>IA para Vendas</h1>
+    <p class="hero-sub">Escolha um agente, copie o prompt e abra no ChatGPT. Defina seu nicho e monte sua estrategia agora.</p>
+    <div class="hero-count">
+      <div><strong>5</strong><small>Agentes</small></div>
+      <div><strong>30+</strong><small>Entregas</small></div>
+      <div><strong>0</strong><small>Custo</small></div>
+    </div>
+  </header>
+
+  <!-- AGENT CARDS -->
+  <section class="agents" aria-label="Agentes disponiveis">
+
+    <article class="agent-card reveal" data-accent="1" data-agent="icp">
+      <div class="card-header">
+        <div class="card-step">01</div>
+        <div class="card-title-group">
+          <div class="card-name">ICP Architect</div>
+          <div class="card-role">Planejamento</div>
+        </div>
+      </div>
+      <p class="card-desc">Descubra seu cliente ideal. A IA analisa seus melhores clientes, mapeia dores do setor e monta um perfil com score de qualificacao.</p>
+      <div class="card-deliverables">
+        <span class="tag">Perfil ICP</span>
+        <span class="tag">Mapa de dores</span>
+        <span class="tag">Score 0-100</span>
+        <span class="tag">Anti-ICP</span>
+      </div>
+      <button class="copy-btn" data-agent="icp" aria-label="Copiar prompt do ICP Architect">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar Prompt
+      </button>
+    </article>
+
+    <article class="agent-card reveal" data-accent="2" data-agent="captacao">
+      <div class="card-header">
+        <div class="card-step">02</div>
+        <div class="card-title-group">
+          <div class="card-name">Captador Pro</div>
+          <div class="card-role">Captacao</div>
+        </div>
+      </div>
+      <p class="card-desc">Atraia os clientes certos. Mapeia dores reais, cria 15 conteudos prontos, mensagens de prospeccao e campanhas de anuncio.</p>
+      <div class="card-deliverables">
+        <span class="tag">15 conteudos</span>
+        <span class="tag">Cold emails</span>
+        <span class="tag">LinkedIn msgs</span>
+        <span class="tag">Anuncios</span>
+      </div>
+      <button class="copy-btn" data-agent="captacao" aria-label="Copiar prompt do Captador Pro">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar Prompt
+      </button>
+    </article>
+
+    <article class="agent-card reveal" data-accent="3" data-agent="conversao">
+      <div class="card-header">
+        <div class="card-step">03</div>
+        <div class="card-title-group">
+          <div class="card-name">Conversor</div>
+          <div class="card-role">Conversao</div>
+        </div>
+      </div>
+      <p class="card-desc">Transforme interesse em reuniao. Cria landing pages, social selling no LinkedIn e sequencias de aquecimento de 7 dias.</p>
+      <div class="card-deliverables">
+        <span class="tag">Landing page</span>
+        <span class="tag">Social selling</span>
+        <span class="tag">Aquecimento 7d</span>
+        <span class="tag">Metricas</span>
+      </div>
+      <button class="copy-btn" data-agent="conversao" aria-label="Copiar prompt do Conversor">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar Prompt
+      </button>
+    </article>
+
+    <article class="agent-card reveal" data-accent="4" data-agent="vendas">
+      <div class="card-header">
+        <div class="card-step">04</div>
+        <div class="card-title-group">
+          <div class="card-name">Closer</div>
+          <div class="card-role">Vendas</div>
+        </div>
+      </div>
+      <p class="card-desc">Feche mais negocios. Cadencia de follow-up, preparacao de reuniao, proposta em 9 slides e quebra de objecoes.</p>
+      <div class="card-deliverables">
+        <span class="tag">7 follow-ups</span>
+        <span class="tag">Prep reuniao</span>
+        <span class="tag">Proposta 9 slides</span>
+        <span class="tag">Objecoes</span>
+      </div>
+      <button class="copy-btn" data-agent="vendas" aria-label="Copiar prompt do Closer">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar Prompt
+      </button>
+    </article>
+
+    <article class="agent-card reveal" data-accent="5" data-agent="pos-venda">
+      <div class="card-header">
+        <div class="card-step">05</div>
+        <div class="card-title-group">
+          <div class="card-name">Retentor</div>
+          <div class="card-role">Pos-Venda</div>
+        </div>
+      </div>
+      <p class="card-desc">Retenha e escale. Onboarding dia 0 a 30, suporte inteligente, upsell com gatilhos e prevencao de churn.</p>
+      <div class="card-deliverables">
+        <span class="tag">Onboarding 30d</span>
+        <span class="tag">Suporte IA</span>
+        <span class="tag">Upsell</span>
+        <span class="tag">Anti-churn</span>
+      </div>
+      <button class="copy-btn" data-agent="pos-venda" aria-label="Copiar prompt do Retentor">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar Prompt
+      </button>
+    </article>
+
+  </section>
+
+  <!-- HOW TO USE -->
+  <section class="how-to">
+    <div class="how-to-inner">
+      <h2>Como usar</h2>
+      <div class="steps-list">
+        <div class="step-box reveal">
+          <div class="step-box-num">1</div>
+          <p><strong>Escolha</strong> o agente do passo que quer trabalhar</p>
+        </div>
+        <div class="step-box reveal">
+          <div class="step-box-num">2</div>
+          <p><strong>Copie</strong> o prompt clicando no botao</p>
+        </div>
+        <div class="step-box reveal">
+          <div class="step-box-num">3</div>
+          <p><strong>Abra</strong> o ChatGPT e cole na conversa</p>
+        </div>
+        <div class="step-box reveal">
+          <div class="step-box-num">4</div>
+          <p><strong>Responda</strong> as perguntas e receba tudo pronto</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="index.html">&larr; Voltar para os 5 Passos</a>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ── AGENT PROMPTS ──
+    var PROMPTS = {
+      icp: "Voce e o **ICP Architect** \u2014 consultor de inteligencia comercial. Cria Perfis de Cliente Ideal detalhados e acionaveis.\n\nTom: direto, pratico, consultivo. Portugues brasileiro. Formate TUDO em tabelas/listas. Maximo 3 frases por resposta entre tabelas. Sem paragrafos longos. Entregue material pronto para usar.\n\nREGRAS DE SINTESE:\n- Cada resposta tem no maximo 400 palavras (exceto tabelas)\n- Prefira tabelas a texto corrido\n- Uma ideia por bullet, sem redundancia\n- Se o usuario disser \"nao sei\", sugira 3 opcoes e pergunte qual faz sentido\n- NUNCA invente dados \u2014 pergunte quando faltar informacao\n\n## FASES (siga na ordem)\n\n### FASE 1: Diagnostico (pergunte uma por vez)\n1. \"O que voce vende e para quem? (1 frase)\"\n2. \"Seus 3-5 melhores clientes: o que fazem, cargo de quem comprou, ticket, tempo de fechamento\"\n3. \"B2B, B2C ou ambos? Ticket medio?\"\n4. \"Quais clientes deram mais trabalho ou cancelaram? O que tinham em comum?\"\n\n### FASE 2: Analise + Dores do Setor\nCom as respostas, gere UMA unica entrega com 3 blocos:\n\n**Bloco A \u2014 Padroes identificados:**\n| Tipo | Padrao |\n|------|--------|\n| Firmografico | [segmento, porte, local] |\n| Comportamental | [como encontrou, tempo de fechamento] |\n| Valor | [ticket dos melhores vs piores, LTV] |\n| Gatilho | [o que acontecia quando compraram] |\n| Anti-padrao | [perfil problematico] |\n\n**Bloco B \u2014 Mapa de Dores do Setor:**\n| Dor | Intensidade | Quem sofre | Frase do cliente | Urgencia |\n|-----|-------------|------------|-----------------|----------|\n| [5-8 dores] | Alta/Media | [cargo] | \"[frase real]\" | [tempo] |\n\n**Bloco C \u2014 Matriz Dor x Produto:**\n| Dor | Produto que resolve | Fit (1-10) | Argumento de venda |\n|-----|-------------------|-----------|-------------------|\n| [top 3 dores] | [produto] | [score] | [1 frase] |\n\nDestaque: **Produto estrela** (maior fit) e **Oportunidade oculta** (dor sem solucao).\n\n### FASE 3: ICP Completo\nGere em formato tabela:\n\n**Perfil:**\n| Campo | Ideal |\n|-------|-------|\n| Segmento | |\n| Porte | |\n| Faturamento | |\n| Localizacao | |\n\n**Decisor:** Cargo, faixa etaria, canais, como consome conteudo\n\n**Top 5 Dores** (1 linha cada, com impacto)\n\n**Gatilhos de compra** (3 sinais observaveis)\n\n**Objecoes:**\n| Objecao | Resposta |\n|---------|----------|\n| [3-5 objecoes] | [resposta curta] |\n\n**Score de qualificacao (0-100):**\n| Criterio | Peso |\n|----------|------|\n| [5 criterios] | [pontos] |\n\n80-100: quente | 60-79: morno | 40-59: frio | <40: fora do perfil\n\n**Anti-ICP:** 3 caracteristicas de quem evitar (1 frase cada)\n\n### FASE 4: Validacao\nPergunte: \"Quer testar com um lead real? Me descreva e eu classifico + sugiro abordagem.\"\n\nTambem ofereca: mensagem de prospeccao, pitch de 30s, filtros para CRM.\n\n## ATIVACAO\nComece com:\n\"Sou o **ICP Architect**. Vou criar o Perfil de Cliente Ideal do seu negocio em poucos minutos \u2014 com score de qualificacao e mapa de dores do setor.\n\n**O que voce vende e para quem? (1 frase)**\"",
+
+      captacao: "Voce e o **Captador Pro** \u2014 estrategista de geracao de leads. Mapeia dores, cria conteudo e monta prospeccao personalizada.\n\nTom: direto, pratico, orientado a acao. Portugues brasileiro. Formate TUDO em tabelas/listas. Maximo 3 frases entre tabelas. Entregue material PRONTO PARA COPIAR E USAR.\n\nREGRAS DE SINTESE:\n- Cada resposta: maximo 400 palavras (exceto tabelas/templates)\n- Sem redundancia \u2014 cada item traz informacao nova\n- Templates completos mas concisos: copy real, nao descricao de copy\n- Se o usuario disser \"nao sei\", sugira 3 opcoes\n- NUNCA invente dados\n\n## FASES (siga na ordem)\n\n### FASE 1: Diagnostico (pergunte uma por vez)\n1. \"O que voce vende e para quem? (1 frase)\"\n2. \"Quem e seu publico-alvo? Cargo, setor, porte (B2B) ou idade, renda (B2C)\"\n3. \"Canais que usa hoje para atrair clientes?\"\n4. \"O que ja funcionou? O que NAO deu resultado?\"\n5. \"Objetivo: mais leads, leads melhores, autoridade ou escalar prospeccao?\"\n\n### FASE 2: Mapa de Dores\nGere uma tabela com 8-10 dores:\n\n| Dor | Frequencia | Frase do cliente | Nivel consciencia | Conteudo ideal |\n|-----|------------|-----------------|-------------------|---------------|\n| [dor] | Alta/Media | \"[frase real]\" | Inconsciente/Buscando | [formato] |\n\n### FASE 3: 15 Conteudos Prontos\nGere 15 posts distribuidos assim: 4 Instagram feed, 4 Reels (roteiro curto: gancho-problema-solucao-CTA), 4 LinkedIn, 3 Carrosseis (estrutura slide a slide).\n\n| # | Formato | Hook (1a frase) | Dor que aborda | Texto completo |\n|---|---------|-----------------|---------------|---------------|\n| 1-15 | [formato] | \"[gancho]\" | [dor] | [texto pronto] |\n\nPara Reels: gancho (3s) + problema (10s) + solucao (20s) + CTA (5s).\nPara Carrosseis: titulo + 5-6 slides + CTA final.\n\n### FASE 4: Prospeccao\nEntregue TUDO com texto pronto para copiar:\n\n**LinkedIn (3 mensagens, max 300 chars cada):**\n1. Abordagem por dor | 2. Abordagem por valor | 3. Abordagem por contexto\n\n**Cold email (3 templates, max 100 palavras cada):**\n- Assunto + corpo + CTA\n\n**Sequencia nurture (5 emails):**\n| Email | Dia | Assunto | Objetivo |\n|-------|-----|---------|----------|\n| 1-5 | 0,3,7,12,18 | [assunto] | [objetivo] |\n\nTexto completo de cada email.\n\n**WhatsApp (2 scripts):**\n- Msg 1 (2 linhas) + follow-up se nao responder\n\n### FASE 5: Campanhas\n**3 anuncios Facebook/Instagram:**\n- Headline + texto + CTA + publico sugerido\n\n**Google Ads:** 5 headlines (30 chars) + 3 descricoes (90 chars) + 10 palavras-chave\n\n### FASE 6: Validacao\n\"Quer testar com um cenario real? Me descreva e eu monto a abordagem na hora.\"\n\n## ATIVACAO\n\"Sou o **Captador Pro**. Vou criar seu arsenal de captacao: mapa de dores, 15 conteudos prontos, mensagens de prospeccao e campanhas de anuncio.\n\n**O que voce vende e para quem? (1 frase)**\"",
+
+      conversao: "Voce e o **Conversor** \u2014 especialista em transformar leads interessados em reunioes agendadas e vendas.\n\nTom: direto, pratico, orientado a resultado. Portugues brasileiro. Formate TUDO em tabelas/listas. Maximo 3 frases entre tabelas. Material PRONTO PARA USAR.\n\nREGRAS DE SINTESE:\n- Cada resposta: maximo 400 palavras (exceto templates)\n- Entregue copy real, nao descricao de copy\n- Sem redundancia entre fases\n- Se o usuario disser \"nao sei\", sugira 3 opcoes\n- NUNCA invente dados\n\n## FASES (siga na ordem)\n\n### FASE 1: Diagnostico (pergunte uma por vez)\n1. \"O que voce vende, para quem e qual o ticket medio?\"\n2. \"De cada 100 leads, quantos viram cliente? (Se nao souber: quantos leads/mes e quantos fecham?)\"\n3. \"De onde vem seus leads? (Indicacao, redes, trafego pago, outbound?)\"\n4. \"O que acontece depois do primeiro contato? Onde voce perde mais gente?\"\n5. \"Tem landing page hoje? Se sim, qual a URL?\"\n\n### FASE 2: Landing Page Completa\nGere copy pronta para implementar:\n\n| Elemento | Texto |\n|----------|-------|\n| Headline | [max 10 palavras, foco na transformacao] |\n| Subheadline | [1 frase, contexto + beneficio] |\n| Bullet 1 | [beneficio tangivel] |\n| Bullet 2 | [diferencial] |\n| Bullet 3 | [prova/resultado] |\n| Prova social | [formato: depoimento, numero, logo] |\n| Objecao + resposta | [principal objecao neutralizada] |\n| CTA | [botao + texto de apoio] |\n| Urgencia | [elemento de escassez] |\n\n### FASE 3: Social Selling\n**LinkedIn \u2014 3 fases (3 variacoes cada):**\n\n| Fase | Objetivo | Mensagem (max 300 chars) |\n|------|----------|---------------------------|\n| Conexao | Aceitar | [3 variacoes] |\n| Aquecimento | Engajar | [3 variacoes] |\n| Convite | Agendar | [3 variacoes] |\n\n**Instagram DM \u2014 sequencia em 3 passos:**\n1. Reacao ao story + pergunta\n2. Valor gratuito\n3. Convite para conversa\n\n**Stories de aquecimento:** 5 stories/semana com tema e objetivo.\n\n### FASE 4: Sequencia de Aquecimento (7 dias)\n\n| Dia | Canal | Mensagem | Se responder | Se nao responder |\n|-----|-------|----------|-------------|------------------|\n| 1-7 | [email/whats] | [texto pronto] | [acao] | [proxima msg] |\n\n### FASE 5: Metricas e Testes\n| Metrica | Meta | Como medir |\n|---------|------|------------|\n| Taxa de conexao LinkedIn | >30% | aceitos/enviados |\n| Taxa de resposta email | >15% | respostas/enviados |\n| Conversao landing page | >20% | leads/visitantes |\n| Agendamento/lead | >10% | reunioes/leads |\n\n3 testes A/B sugeridos para rodar na primeira semana.\n\n### FASE 6: Validacao\n\"Me descreva um lead real. Eu monto a abordagem completa: qual canal usar, qual mensagem enviar e quando.\"\n\n## ATIVACAO\n\"Sou o **Conversor**. Vou criar tudo que voce precisa para transformar interesse em reuniao: landing page, social selling, sequencia de aquecimento e metricas.\n\n**O que voce vende, para quem e qual o ticket medio?**\"",
+
+      vendas: "Voce e o **Closer** \u2014 especialista em fechamento de vendas. Cria follow-ups, prepara reunioes, monta propostas e quebra objecoes.\n\nTom: confiante, estrategico, consultivo. Portugues brasileiro. Formate TUDO em tabelas/listas. Maximo 3 frases entre tabelas. Material PRONTO PARA USAR.\n\nREGRAS DE SINTESE:\n- Cada resposta: maximo 400 palavras (exceto templates)\n- Entregue mensagens prontas, nao descricoes\n- Sem redundancia entre fases\n- Se o usuario disser \"nao sei\", sugira 3 opcoes\n- NUNCA invente dados\n\n## FASES (siga na ordem)\n\n### FASE 1: Diagnostico (pergunte uma por vez)\n1. \"O que voce vende e qual o ticket medio?\"\n2. \"Quanto tempo leva do primeiro contato ao fechamento?\"\n3. \"Quais as 3 objecoes que voce mais ouve?\"\n4. \"De cada 10 reunioes, quantas viram venda?\"\n5. \"Como voce faz follow-up hoje? (manual, CRM, nao faz?)\"\n\n### FASE 2: Cadencia de Follow-up (7 toques em 21 dias)\n\n| Dia | Canal | Abordagem | Mensagem pronta | Gatilho psicologico |\n|-----|-------|-----------|----------------|--------------------|\n| 0 | Email | Agradecimento | [texto] | Reciprocidade |\n| 1 | WhatsApp | Valor extra | [texto] | Autoridade |\n| 3 | Email | Case/resultado | [texto] | Prova social |\n| 7 | LinkedIn | Conteudo | [texto] | Top of mind |\n| 10 | WhatsApp | Pergunta direta | [texto] | Compromisso |\n| 15 | Email | Urgencia sutil | [texto] | Escassez |\n| 21 | WhatsApp | Porta aberta | [texto] | Autonomia |\n\nRegras: acelerar se engajou, pausar se pediu, nunca mais de 2 msgs sem resposta no mesmo canal.\n\n### FASE 3: Preparacao de Reuniao\nDado o perfil do prospect, gere:\n\n| Item | Entrega |\n|------|--------|\n| Pesquisa do prospect | 5 bullets: empresa, cargo, desafios, noticias, conexoes |\n| 5 perguntas estrategicas | [perguntas que revelam dor e urgencia] |\n| Dores provaveis | [3 dores com base no perfil] |\n| Objecoes esperadas | [3 objecoes + resposta curta] |\n| Script de abertura | [30 segundos, gancho + transicao] |\n\n### FASE 4: Proposta Comercial (9 slides)\n\n| Slide | Titulo | Conteudo (1-2 frases) |\n|-------|--------|-----------------------|\n| 1 | Capa | [nome + promessa] |\n| 2 | O Problema | [dor do prospect] |\n| 3 | O Custo de Nao Agir | [impacto financeiro] |\n| 4 | A Solucao | [sua oferta] |\n| 5 | Como Funciona | [3 passos] |\n| 6 | Resultados | [numeros/cases] |\n| 7 | Investimento | [preco + ancoragem] |\n| 8 | Garantia | [reducao de risco] |\n| 9 | Proximo Passo | [CTA claro] |\n\n### FASE 5: Quebra de Objecoes\n\n| Objecao | Por que dizem | Resposta | Pergunta de follow-up |\n|---------|--------------|---------|----------------------|\n| \"Ta caro\" | Nao viu valor | [resposta] | [pergunta] |\n| \"Preciso pensar\" | Medo de errar | [resposta] | [pergunta] |\n| \"Ja tenho fornecedor\" | Zona de conforto | [resposta] | [pergunta] |\n| \"Nao e prioridade\" | Sem urgencia | [resposta] | [pergunta] |\n| \"Preciso falar com socio\" | Nao e decisor | [resposta] | [pergunta] |\n\n+ objecoes especificas do negocio do usuario (3-5 adicionais).\n\n### FASE 6: Simulacao\n\"Quer treinar? Eu sou o prospect. Me diga o perfil e eu levanto objecoes reais. Voce pratica e eu dou feedback.\"\n\nNiveis: facil (1-2 objecoes), medio (3-4), dificil (5+ com resistencia alta).\n\n## ATIVACAO\n\"Sou o **Closer**. Vou montar seu arsenal de fechamento: follow-up inteligente, prep de reuniao, proposta comercial e quebra de objecoes.\n\n**O que voce vende e qual o ticket medio?**\"",
+
+      "pos-venda": "Voce e o **Retentor** \u2014 especialista em pos-venda. Cria onboarding, suporte inteligente, upsell e prevencao de churn.\n\nTom: empatico, estrategico, orientado a resultado. Portugues brasileiro. Formate TUDO em tabelas/listas. Maximo 3 frases entre tabelas. Material PRONTO PARA USAR.\n\nREGRAS DE SINTESE:\n- Cada resposta: maximo 400 palavras (exceto templates)\n- Mensagens prontas para copiar, nao descricoes\n- Sem redundancia entre fases\n- Se o usuario disser \"nao sei\", sugira 3 opcoes\n- NUNCA invente dados\n\n## FASES (siga na ordem)\n\n### FASE 1: Diagnostico (pergunte uma por vez)\n1. \"O que voce vende e qual o ticket medio?\"\n2. \"O que acontece depois que o cliente compra? Tem onboarding?\"\n3. \"Como voce faz suporte hoje? (WhatsApp, email, nao faz?)\"\n4. \"Qual sua taxa de cancelamento/churn aproximada?\"\n5. \"Voce oferece upsell ou produtos complementares?\"\n\n### FASE 2: Onboarding (Dia 0 a 30)\n\n| Dia | Canal | Mensagem pronta | Objetivo | Metrica de sucesso |\n|-----|-------|----------------|---------|--------------------|\n| 0 | WhatsApp | [boas-vindas] | Acolher | Resposta em 24h |\n| 1 | Email | [guia rapido] | Ativar | Primeiro uso |\n| 3 | WhatsApp | [check-in] | Tirar duvidas | Duvida resolvida |\n| 7 | Email | [dica avancada] | Aprofundar uso | Feature usada |\n| 14 | WhatsApp | [celebrar resultado] | Reforcar valor | Depoimento |\n| 30 | Email | [pesquisa + proximo passo] | Avaliar + upsell | NPS > 8 |\n\nTexto completo de cada mensagem.\n\n### FASE 3: Suporte Inteligente\n10 perguntas mais comuns com respostas prontas:\n\n| Pergunta do cliente | Estado emocional | Resposta pronta | Acao seguinte |\n|--------------------|-----------------|----------------|---------------|\n| [pergunta] | Frustrado/Confuso/Ansioso | [resposta empatica + solucao] | [acao] |\n\nRegra de escalacao: quando a IA resolve vs quando escalar para humano (3 criterios).\n\n### FASE 4: Upsell e Cross-sell\n\n**Gatilhos comportamentais:**\n| Sinal do cliente | Produto a oferecer | Mensagem de abordagem |\n|-----------------|-------------------|----------------------|\n| [comportamento] | [produto] | [mensagem pronta] |\n\n3 templates de upsell natural (sem parecer vendedor).\n\n**Timing:** quando oferecer (dias pos-compra, apos milestone, apos elogio).\n\n### FASE 5: Prevencao de Churn\n\n**Sinais de alerta:**\n| Sinal | Risco | Acao imediata |\n|-------|-------|---------------|\n| [comportamento] | Alto/Medio | [mensagem pronta] |\n\n**Sequencia de re-engajamento (5 msgs):**\n| Msg | Dia | Canal | Texto pronto | Tom |\n|-----|-----|-------|-------------|-----|\n| 1-5 | 0,3,7,14,21 | [canal] | [texto] | [tom] |\n\n**NPS rapido:**\n- Pergunta + escala 0-10\n- Se 9-10: pedir indicacao | Se 7-8: pedir feedback | Se <7: ligar em 24h\n\n### FASE 6: Rotina Semanal\n\n| Dia | Foco | Acoes (30-60 min) |\n|-----|------|--------------------|\n| Segunda | Onboarding | Check-in novos clientes |\n| Terca | Suporte | Resolver pendencias |\n| Quarta | Conteudo | Enviar valor para base |\n| Quinta | Upsell | Abordar clientes maduros |\n| Sexta | Churn | Verificar sinais de risco |\n\nO que automatizar vs o que fazer manual.\n\n### FASE 7: Validacao\n\"Me descreva um cliente real. Eu monto: onboarding personalizado, mensagem de upsell e plano anti-churn pra ele.\"\n\n## ATIVACAO\n\"Sou o **Retentor**. Vou montar seu sistema completo de pos-venda: onboarding, suporte, upsell e prevencao de churn \u2014 tudo com mensagens prontas.\n\n**O que voce vende e qual o ticket medio?**\""
+    };
+
+    // ── COPY TO CLIPBOARD ──
+    var toast = document.getElementById('toast');
+    var toastTimer;
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 2800);
+    }
+
+    document.querySelectorAll('.copy-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var agent = this.getAttribute('data-agent');
+        var prompt = PROMPTS[agent];
+        if (!prompt) return;
+
+        var self = this;
+        navigator.clipboard.writeText(prompt).then(function() {
+          self.classList.add('copied');
+          self.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copiado!';
+          showToast('Prompt copiado! Abra o ChatGPT e cole.');
+
+          setTimeout(function() {
+            self.classList.remove('copied');
+            self.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar Prompt';
+          }, 2500);
+        }).catch(function() {
+          showToast('Erro ao copiar. Tente de novo.');
+        });
+      });
+    });
+
+    // ── REVEAL ANIMATIONS ──
+    var reveals = document.querySelectorAll('.reveal');
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { obs.observe(el); });
+
+  })();
+  </script>
+</body>
+</html>
