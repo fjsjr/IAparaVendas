@@ -1,0 +1,306 @@
+<title>Método MAPA — Cola de Bolso</title>
+<style>
+  :root {
+    --ground: #FFF9F5;
+    --card: #FFFFFF;
+    --ink: #241B16;
+    --muted: #8A7D74;
+    --line: #F0E4DB;
+    --chip: #FBF1EA;
+
+    --m: #FE5000; /* Motivo  */
+    --a1: #FF2D78; /* Alvo    */
+    --p: #7C5CFF; /* Processo */
+    --a2: #1E88FF; /* Ação    */
+
+    --gold: #B8860B;
+    --gold-bg: #FFF6DE;
+
+    --sans: ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --body: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+    --mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #17110D;
+      --card: #221913;
+      --ink: #FBF3EE;
+      --muted: #B4A79C;
+      --line: #3A2B22;
+      --chip: #2C211A;
+      --gold: #E9C868;
+      --gold-bg: #2E2412;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #FFF9F5; --card: #FFFFFF; --ink: #241B16; --muted: #8A7D74;
+    --line: #F0E4DB; --chip: #FBF1EA; --gold: #B8860B; --gold-bg: #FFF6DE;
+  }
+  :root[data-theme="dark"] {
+    --ground: #17110D; --card: #221913; --ink: #FBF3EE; --muted: #B4A79C;
+    --line: #3A2B22; --chip: #2C211A; --gold: #E9C868; --gold-bg: #2E2412;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    padding: 28px 18px 48px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 760px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 34px 38px 30px;
+    box-shadow: 0 24px 60px -30px rgba(120, 60, 20, .35);
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .wordmark {
+    display: flex;
+    gap: .04em;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(56px, 13vw, 104px);
+    line-height: .9;
+    letter-spacing: -.01em;
+    margin: 0;
+  }
+  .wordmark span:nth-child(1) { color: var(--m); }
+  .wordmark span:nth-child(2) { color: var(--a1); }
+  .wordmark span:nth-child(3) { color: var(--p); }
+  .wordmark span:nth-child(4) { color: var(--a2); }
+
+  .tagline {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(16px, 3.4vw, 20px);
+    margin: 12px 0 0;
+    text-wrap: balance;
+  }
+  .tagline em { color: var(--m); font-style: normal; }
+  .sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 4px 0 0;
+    max-width: 52ch;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px dashed var(--line);
+    margin: 26px 0 22px;
+  }
+
+  /* ---------- Blocos ---------- */
+  .blocks { display: flex; flex-direction: column; gap: 14px; }
+
+  .block {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 18px;
+    align-items: start;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+  }
+  .tile {
+    width: 60px; height: 60px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 34px;
+    color: #fff;
+  }
+  .b-m  .tile { background: var(--m); }
+  .b-a1 .tile { background: var(--a1); }
+  .b-p  .tile { background: var(--p); }
+  .b-a2 .tile { background: var(--a2); }
+
+  .b-m  { border-left: 4px solid var(--m); }
+  .b-a1 { border-left: 4px solid var(--a1); }
+  .b-p  { border-left: 4px solid var(--p); }
+  .b-a2 { border-left: 4px solid var(--a2); }
+
+  .word {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 20px;
+    margin: 2px 0 0;
+  }
+  .b-m  .word { color: var(--m); }
+  .b-a1 .word { color: var(--a1); }
+  .b-p  .word { color: var(--p); }
+  .b-a2 .word { color: var(--a2); }
+
+  .ask {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin: 3px 0 8px;
+  }
+  .ex {
+    font-size: 13.5px;
+    color: var(--muted);
+    background: var(--chip);
+    border-radius: 9px;
+    padding: 7px 11px;
+    margin: 0;
+  }
+  .ex b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Dica de ouro ---------- */
+  .gold {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding: 13px 16px;
+    background: var(--gold-bg);
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    border-radius: 14px;
+    font-size: 13.5px;
+  }
+  .gold .star { font-size: 18px; line-height: 1.3; }
+  .gold b { color: var(--gold); }
+
+  /* ---------- Prompt final ---------- */
+  .final { margin-top: 24px; }
+  .final-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .prompt {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    background: var(--chip);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 0;
+  }
+  .prompt mark {
+    background: none;
+    font-weight: 700;
+    padding: 0 1px;
+  }
+  .tag-m  { color: var(--m); }
+  .tag-a1 { color: var(--a1); }
+  .tag-p  { color: var(--p); }
+  .tag-a2 { color: var(--a2); }
+
+  /* ---------- Rodapé ---------- */
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-top: 26px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .foot .brand { font-family: var(--sans); font-weight: 700; color: var(--ink); }
+  .foot .brand span { color: var(--m); }
+  .sign { font-family: "Snell Roundhand", "Segoe Script", cursive; font-size: 20px; color: var(--ink); }
+
+  /* ---------- Impressão ---------- */
+  @page { size: A4 portrait; margin: 12mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .card { box-shadow: none; border: none; max-width: 100%; padding: 0; }
+    :root { --ground:#FFF9F5; --card:#fff; --ink:#241B16; --muted:#6f645c;
+            --line:#E8DACE; --chip:#FBF1EA; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+
+<div class="card">
+  <p class="eyebrow">Cola de bolso · Prompt de IA</p>
+  <h1 class="wordmark" aria-label="MAPA"><span>M</span><span>A</span><span>P</span><span>A</span></h1>
+  <p class="tagline">O <em>mapa</em> do prompt perfeito — 4 passos para a IA acertar de primeira.</p>
+  <p class="sub">Responda estas 4 perguntas na sua mensagem e você para de receber resposta genérica.</p>
+
+  <hr class="rule">
+
+  <div class="blocks">
+    <div class="block b-m">
+      <div class="tile">M</div>
+      <div>
+        <p class="word">Motivo</p>
+        <p class="ask">Por que você está pedindo isso?</p>
+        <p class="ex"><b>Ex.:</b> Preciso atrair dentistas para minha consultoria financeira.</p>
+      </div>
+    </div>
+
+    <div class="block b-a1">
+      <div class="tile">A</div>
+      <div>
+        <p class="word">Alvo</p>
+        <p class="ask">Para quem é a resposta? (persona clara)</p>
+        <p class="ex"><b>Ex.:</b> Donos de consultório pequeno, com até 3 cadeiras.</p>
+      </div>
+    </div>
+
+    <div class="block b-p">
+      <div class="tile">P</div>
+      <div>
+        <p class="word">Processo</p>
+        <p class="ask">Quem a IA deve ser e como deve responder?</p>
+        <p class="ex"><b>Ex.:</b> Aja como um consultor de marketing experiente, em linguagem simples.</p>
+      </div>
+    </div>
+
+    <div class="block b-a2">
+      <div class="tile">A</div>
+      <div>
+        <p class="word">Ação</p>
+        <p class="ask">O que exatamente você quer? (formato incluso)</p>
+        <p class="ex"><b>Ex.:</b> Crie um carrossel de Instagram com 5 slides e CTA no final.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold">
+    <span class="star">⭐</span>
+    <div><b>Dica de ouro:</b> no <b>Processo</b>, sempre comece dizendo <b>quem a IA deve ser</b> ("Aja como um..."). É o ajuste que mais muda a qualidade da resposta.</div>
+  </div>
+
+  <div class="final">
+    <p class="final-label">Prompt final montado</p>
+    <p class="prompt">"<mark class="tag-p">Aja como um consultor de marketing experiente</mark>. Preciso <mark class="tag-m">atrair dentistas para minha consultoria financeira</mark>. O público são <mark class="tag-a1">donos de consultório com até 3 cadeiras</mark>. <mark class="tag-a2">Crie um carrossel de Instagram com 5 slides e CTA no final</mark>, em linguagem simples e pronto para postar."</p>
+  </div>
+
+  <div class="foot">
+    <span class="brand">CF <span>Contabilidade</span> · IA para Vendas</span>
+    <span class="sign">Fernando Junior</span>
+  </div>
+</div>

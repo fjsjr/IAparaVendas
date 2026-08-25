@@ -1,0 +1,83 @@
+handoff:
+  from_agent: aiox-master
+  to_agent: dev
+  timestamp: "2026-05-07T21:00:00-03:00"
+  consumed: false
+
+  story_context:
+    story_id: "PITCH-ENERGIA-DA-MIDIA-001"
+    story_path: "n/a — pitch criado em sessão, sem story file"
+    story_status: "script finalizado, aguardando materialização em HTML/slides"
+    current_task: "create-pitch (oren-klaff + hormozi-offers)"
+    branch: "main"
+
+  context:
+    platform_name: "Energia da Mídia"
+    event: "Quinta do Conhecimento"
+    event_date: "2026-05-08"
+    event_format: "Pitch no almoço — telão + stand"
+    pitch_duration: "~10 minutos"
+    target_audience: "Misto: PMEs + empreendedores iniciantes"
+
+  pitch_structure:
+    bloco_1: "Âncora do problema — levantar mão, isolamento da dor"
+    bloco_2: "Demo visual — vídeo + fotos geradas por IA (Felipe/Sério Vídeo)"
+    bloco_3: "Tabela de valor real — R$143.952/ano para montar equipe completa"
+    bloco_4: "Custo por imagem — R$2–4 vs R$80–500 no mercado"
+    bloco_5: "Ancoragem de preço em 3 camadas"
+    bloco_6: "Fechamento com QR Code + equipe no stand"
+
+  pricing_decisions:
+    - "Preço âncora de lançamento (segunda-feira): R$30.000 — implantação individual assistida"
+    - "Oferta evento individual (70% off): R$9.000 ou 12x R$750"
+    - "Oferta evento grupo (90% off): R$3.000 ou 12x R$300 — 4 encontros de 2h, única rodada"
+    - "Tokens de imagem: R$2–4 por imagem, pagamento direto na plataforma (não é mensalidade)"
+    - "Sem mensalidade jamais — plataforma é do cliente para sempre após implantação"
+    - "Implantação por empresa — 2 empresas = dobra o valor"
+    - "Comissão para equipe do stand: R$50 por venda fechada"
+
+  value_table_used:
+    minichat: "R$197/mês | R$2.364/ano"
+    mlabs: "R$299/mês | R$3.588/ano"
+    social_media: "R$2.500/mês | R$30.000/ano"
+    copywriter: "R$3.000/mês | R$36.000/ano"
+    designer: "R$2.000/mês | R$24.000/ano"
+    gestor_de_trafego: "R$2.500/mês | R$30.000/ano"
+    producao_de_video: "R$1.500/mês | R$18.000/ano"
+    total_anual: "R$143.952/ano"
+
+  platform_features:
+    free_with_implementation:
+      - Agendamento e publicação automática
+      - Análise de tráfego e redes sociais
+      - Minichat (chatbot WhatsApp)
+    with_tokens:
+      - Geração de imagens por IA
+      - Geração de vídeo por IA
+      - Linha editorial completa (briefing + persona)
+
+  event_team:
+    - "Fernando — implementação e pitch"
+    - "Léo — stand"
+    - "Filipe — stand (treinado)"
+    - "Pedro — stand (substituto do Bjorn)"
+
+  decisions:
+    - "NÃO mencionar que está em beta — conflita com cobrança de implantação"
+    - "Proof principal é o demo visual (vídeo + fotos IA), não prints de redes"
+    - "Não enfatizar tokenização no pitch — deixar o cliente subir na implantação, depois mete tokens"
+    - "Plataforma gratuita só para quem implantar com a equipe — não é open access"
+    - "Foco no demo ao vivo no stand para mostrar que funciona"
+
+  files_modified: []
+
+  blockers:
+    - "Slides HTML/visuais ainda não criados — pitch existe só como script de texto"
+    - "Falta inserir resultados reais de redes (só vídeo/fotos IA disponíveis como prova)"
+
+  next_action: |
+    Agente @dev ou @ux-design-expert deve materializar o script em slides HTML
+    para projeção no telão. Estrutura: 5 slides principais + slide de fechamento
+    com QR Code. Design: fundo escuro, tipografia grande, tabela de ancoragem
+    com destaque visual nos totais. Referência de script: sessão aiox-master
+    de 2026-05-07.

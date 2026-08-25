@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude — Apresentação Interativa · Fernando Junior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --org:#FE5000;--org2:#ff8a3d;--coral:#FFA38D;--lilac:#D8B3FD;--blue:#606FEF;
+  --bg:#0A1254;--bg-deep:#070D3D;--bg2:#0F1A6B;--card:#101c63;--card2:rgba(16,28,99,.6);
+  --line:rgba(150,162,230,.18);--line2:rgba(150,162,230,.32);--ink:#f3f4ff;--mut:#9aa3d8;
+  --ok:#2bd576;--wa:#25d366;
+  --disp:'Poppins',sans-serif;--sans:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --sign:'Dancing Script',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:#070D3D;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+
+/* ─── APRESENTAÇÃO WRAPPER ─── */
+#app{width:100vw;height:100vh;position:relative;overflow:hidden}
+
+/* ─── FUNDO ANIMADO ─── */
+.bg-layer{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,var(--bg2) 0%,var(--bg) 48%,var(--bg-deep) 100%);z-index:0}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;pointer-events:none}
+.orb1{width:600px;height:600px;background:var(--org);top:-200px;right:-150px;animation:drift1 18s ease-in-out infinite}
+.orb2{width:500px;height:500px;background:var(--blue);bottom:-150px;left:-100px;animation:drift2 22s ease-in-out infinite}
+.orb3{width:350px;height:350px;background:var(--lilac);top:40%;left:40%;animation:drift3 16s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(-80px,60px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-80px)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
+
+/* ─── SLIDES ─── */
+.slides{position:absolute;inset:0;z-index:10}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 60px 80px;opacity:0;pointer-events:none;transition:opacity .6s ease,transform .6s ease;transform:translateY(30px)}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.slide.exit-up{opacity:0;transform:translateY(-30px)}
+
+/* ─── HEADER FIXO ─── */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:rgba(7,13,61,.7);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo-sig{font-family:var(--sign);font-size:26px;color:#fff;letter-spacing:.02em;line-height:1}
+.logo-sig span{color:var(--org)}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.slide-counter{font-family:var(--mono);font-size:12px;color:var(--mut)}
+.slide-counter b{color:var(--ok)}
+
+/* ─── PROGRESS BAR ─── */
+.progress{position:fixed;top:65px;left:0;right:0;z-index:80;height:3px;background:rgba(255,255,255,.06)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--org),var(--org2));transition:width .5s cubic-bezier(.2,.8,.2,1)}
+
+/* ─── NAV ─── */
+.nav{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:80;display:flex;align-items:center;gap:12px}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:.3s;border:none}
+.nav-dot.active{background:var(--org);width:24px;border-radius:4px}
+.nav-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--ink);font-size:20px;cursor:pointer;display:grid;place-items:center;transition:.2s;backdrop-filter:blur(8px)}
+.nav-btn:hover{background:rgba(254,80,0,.15);border-color:var(--org)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+
+/* ─── SLIDE 1 — INTRO ─── */
+.s1-eyebrow{font-family:var(--mono);font-size:clamp(11px,1.5vw,14px);letter-spacing:.3em;text-transform:uppercase;color:var(--org);margin-bottom:20px}
+.s1-title{font-family:var(--disp);font-weight:900;font-size:clamp(60px,12vw,130px);line-height:.9;letter-spacing:-.04em;text-align:center}
+.s1-title em{font-style:normal;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.25)}
+.s1-title strong{color:var(--org)}
+.s1-sub{font-size:clamp(16px,2.2vw,22px);color:var(--mut);margin-top:28px;max-width:38ch;text-align:center;line-height:1.6}
+.s1-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;justify-content:center}
+.chip{font-family:var(--mono);font-size:13px;padding:8px 18px;border:1px solid var(--line2);border-radius:999px;color:var(--ink);background:rgba(255,255,255,.04);backdrop-filter:blur(6px)}
+.chip b{color:var(--org2)}
+.s1-scroll{margin-top:48px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:8px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ─── SLIDE 2 — SOBRE CLAUDE ─── */
+.s-label{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--coral);margin-bottom:12px}
+.s-title{font-family:var(--disp);font-weight:800;font-size:clamp(32px,5vw,58px);line-height:1.05;letter-spacing:-.02em;margin-bottom:24px}
+.s-title b{color:var(--org)}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px}
+.card{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:24px 22px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--org),transparent);opacity:0;transition:.3s}
+.card:hover::before{opacity:1}
+.card-icon{font-size:32px;margin-bottom:14px}
+.card-title{font-family:var(--disp);font-weight:700;font-size:17px;margin-bottom:8px}
+.card-body{font-size:14px;color:var(--mut);line-height:1.6}
+.card-body b{color:var(--coral)}
+
+/* ─── SLIDE 3 — GUI vs CLI ─── */
+.compare-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:0;width:100%;max-width:860px;align-items:start}
+.col-card{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:28px 24px;backdrop-filter:blur(10px)}
+.col-card.gui-card{border-top:3px solid var(--blue)}
+.col-card.cli-card{border-top:3px solid var(--org)}
+.col-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.col-tag{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:4px 12px;border-radius:999px}
+.tag-gui{background:rgba(96,111,239,.18);color:#a0aaff;border:1px solid rgba(96,111,239,.3)}
+.tag-cli{background:rgba(254,80,0,.14);color:var(--org2);border:1px solid rgba(254,80,0,.3)}
+.col-name{font-family:var(--disp);font-weight:800;font-size:26px}
+.col-sub{font-size:13.5px;color:var(--mut);margin-bottom:16px;line-height:1.5}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.feat-list li{font-size:13.5px;color:var(--mut);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.feat-list li::before{content:'';flex:none;width:6px;height:6px;border-radius:50%;margin-top:6px}
+.feat-list.gui-list li::before{background:var(--blue)}
+.feat-list.cli-list li::before{background:var(--org)}
+.feat-list b{color:var(--ink)}
+.vs-divider{display:flex;align-items:center;justify-content:center;padding:0 20px;align-self:center}
+.vs-badge{font-family:var(--disp);font-weight:900;font-size:22px;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line2);display:grid;place-items:center;color:var(--mut)}
+.cli-demo{margin-top:16px;background:#0a0e1a;border:1px solid #1e2740;border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:13px}
+.cli-demo .prompt{color:#4ade80}
+.cli-demo .cmd{color:#e3e8f5}
+.cli-demo .out{color:var(--mut);margin-top:4px}
+
+/* ─── SLIDE 4 — ChatGPT vs Claude ─── */
+.versus-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:900px}
+.v-card{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:26px 22px;backdrop-filter:blur(10px)}
+.v-card.claude-card{border-top:3px solid var(--coral)}
+.v-card.gpt-card{border-top:3px solid #19c37d}
+.v-logo{font-family:var(--disp);font-weight:900;font-size:22px;margin-bottom:4px}
+.v-maker{font-family:var(--mono);font-size:11px;color:var(--mut);letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px}
+.v-rows{display:flex;flex-direction:column;gap:12px}
+.v-row{display:flex;flex-direction:column;gap:4px}
+.v-row-label{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut)}
+.v-row-val{font-size:14px;color:var(--ink);line-height:1.5}
+.v-row-val b{color:var(--coral)}
+.highlight-row{background:rgba(255,163,141,.08);border:1px solid rgba(255,163,141,.2);border-radius:10px;padding:10px 12px}
+
+/* ─── SLIDE 5 — O QUE CLAUDE FAZ ─── */
+.powers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;max-width:900px}
+.power-card{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:20px 18px;cursor:pointer;transition:.3s;backdrop-filter:blur(8px)}
+.power-card:hover,.power-card.open{border-color:var(--org);background:rgba(254,80,0,.06)}
+.power-card .p-icon{font-size:28px;margin-bottom:12px}
+.power-card .p-title{font-family:var(--disp);font-weight:700;font-size:16px;margin-bottom:6px}
+.power-card .p-desc{font-size:13px;color:var(--mut);line-height:1.5;display:none}
+.power-card.open .p-desc{display:block}
+.power-card .p-tag{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--org);margin-top:8px}
+
+/* ─── SLIDE 6 — ARTEFATOS ─── */
+.artifacts-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:900px;align-items:start}
+.art-left{display:flex;flex-direction:column;gap:14px}
+.art-item{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:.25s;backdrop-filter:blur(8px)}
+.art-item:hover,.art-item.sel{border-color:var(--org);background:rgba(254,80,0,.06)}
+.art-item .a-icon{font-size:24px;flex:none;margin-top:2px}
+.art-item .a-text .a-title{font-family:var(--disp);font-weight:700;font-size:15px;margin-bottom:3px}
+.art-item .a-text .a-sub{font-size:12.5px;color:var(--mut)}
+.art-preview{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:22px 20px;min-height:320px;backdrop-filter:blur(8px)}
+.art-preview .ap-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-bottom:14px}
+.art-preview .ap-content{font-size:14px;color:var(--ink);line-height:1.7}
+.ap-code{background:#050917;border:1px solid #1a2240;border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;color:#c9d1e8;line-height:1.7;margin-top:10px}
+.ap-code .kw{color:#c792ea}.ap-code .fn{color:#82aaff}.ap-code .str{color:#c3e88d}.ap-code .cm{color:#4a5568}
+
+/* ─── SLIDE 7 — CONEXÕES ─── */
+.conn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;max-width:900px}
+.conn-card{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center;backdrop-filter:blur(8px);transition:.25s}
+.conn-card:hover{border-color:var(--lilac);background:rgba(216,179,253,.06)}
+.conn-card .cc-icon{font-size:30px;margin-bottom:10px}
+.conn-card .cc-name{font-family:var(--disp);font-weight:700;font-size:14px;margin-bottom:4px}
+.conn-card .cc-type{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut)}
+.conn-center{grid-column:2/-2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px}
+.claude-badge{font-family:var(--disp);font-weight:900;font-size:28px;background:linear-gradient(120deg,var(--org),var(--coral),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ─── SLIDE 8 — SKILLS & PROJETOS ─── */
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:900px}
+.skill-group{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:22px 20px;backdrop-filter:blur(8px)}
+.sg-title{font-family:var(--disp);font-weight:700;font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.sg-list{display:flex;flex-direction:column;gap:8px}
+.sg-item{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--mut);padding:8px 10px;border-radius:8px;transition:.2s}
+.sg-item:hover{background:rgba(255,255,255,.04);color:var(--ink)}
+.sg-item .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.sg-item b{color:var(--ink)}
+
+/* ─── SLIDE FINAL ─── */
+.final-title{font-family:var(--disp);font-weight:900;font-size:clamp(40px,8vw,90px);line-height:.95;letter-spacing:-.04em;text-align:center}
+.final-title span{color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.2)}
+.final-title strong{color:var(--org)}
+.final-sub{font-size:clamp(16px,2vw,20px);color:var(--mut);margin-top:24px;max-width:36ch;text-align:center;line-height:1.6}
+.final-sig{font-family:var(--sign);font-size:clamp(32px,5vw,52px);color:var(--coral);margin-top:32px;opacity:.85}
+.cta-row{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;justify-content:center}
+.download-box{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.btn-download{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(254,80,0,.15),rgba(254,80,0,.05));border:1.5px solid rgba(254,80,0,.5);border-radius:14px;padding:14px 24px;text-decoration:none;color:var(--ink);transition:all .25s;cursor:pointer}
+.btn-download:hover{background:linear-gradient(135deg,rgba(254,80,0,.28),rgba(254,80,0,.1));border-color:var(--org);transform:translateY(-2px);box-shadow:0 8px 24px rgba(254,80,0,.2)}
+.dl-icon{font-size:24px;line-height:1}
+.dl-text{display:flex;flex-direction:column;text-align:left}
+.dl-text strong{font-size:15px;font-weight:700;color:var(--ink)}
+.dl-text small{font-size:12px;color:var(--mut);margin-top:2px}
+.dl-senha{font-size:13px;color:var(--mut)}
+.dl-senha code{background:rgba(254,80,0,.15);border:1px solid rgba(254,80,0,.3);border-radius:6px;padding:2px 8px;color:var(--org);font-family:var(--mono);font-weight:700;letter-spacing:.05em}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:999px;font-family:var(--disp);font-weight:700;font-size:16px;cursor:pointer;border:none;text-decoration:none;transition:.18s}
+.btn-org{background:linear-gradient(120deg,var(--org),var(--org2));color:#1a0a00}
+.btn-org:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line2)}
+.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:var(--line2)}
+
+/* ─── TRANSIÇÕES ─── */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .5s ease, transform .5s ease}
+.fade-up.vis{opacity:1;transform:translateY(0)}
+.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}.delay-5{transition-delay:.5s}
+
+/* ─── SLIDE 5 — 3 NÍVEIS ─── */
+.niveis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:920px}
+.nivel-card{border-radius:18px;padding:24px 20px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;backdrop-filter:blur(10px)}
+.nivel-1{background:rgba(16,28,99,.5);border:1px solid rgba(150,162,230,.2)}
+.nivel-2{background:rgba(30,14,6,.6);border:1px solid rgba(254,80,0,.35)}
+.nivel-3{background:rgba(20,10,40,.6);border:1px solid rgba(216,179,253,.3)}
+.nivel-card::before{content:'';position:absolute;inset:0;opacity:.06;pointer-events:none}
+.nivel-1::before{background:var(--blue)}
+.nivel-2::before{background:var(--org)}
+.nivel-3::before{background:var(--lilac)}
+.nivel-badge{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:4px 12px;border-radius:999px;display:inline-flex;width:fit-content}
+.nivel-badge{background:rgba(150,162,230,.12);color:var(--mut);border:1px solid rgba(150,162,230,.2)}
+.n2-badge{background:rgba(254,80,0,.14);color:var(--org2);border:1px solid rgba(254,80,0,.3)}
+.n3-badge{background:rgba(216,179,253,.12);color:var(--lilac);border:1px solid rgba(216,179,253,.25)}
+.nivel-icon{font-size:32px}
+.nivel-title{font-family:var(--disp);font-weight:800;font-size:clamp(17px,2.2vw,22px);line-height:1.15;color:var(--ink)}
+.nivel-desc{font-size:13.5px;color:var(--mut);line-height:1.6}
+.nivel-example{background:rgba(0,0,0,.2);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.ne-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(150,162,230,.5);margin-bottom:2px}
+.ne-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)}
+.ne-dot{width:6px;height:6px;border-radius:50%;flex:none}
+.n1-dot{background:var(--blue)}
+.n2-dot{background:var(--org)}
+.n3-dot{background:var(--lilac)}
+.nivel-footer{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding-top:10px;border-top:1px solid rgba(150,162,230,.12);color:var(--mut)}
+.n1-footer{color:#a0aaff}
+.n2-footer{color:var(--org2)}
+.n3-footer{color:var(--lilac)}
+
+/* ─── SLIDE 6 — 5 BLOCOS ─── */
+.blocos-wrap{display:grid;grid-template-columns:1fr 180px 1fr;gap:0;width:100%;max-width:920px;align-items:center}
+.blocos-col{display:flex;flex-direction:column;gap:12px}
+.blocos-left .bloco-card{border-right:none;border-radius:14px 0 0 14px}
+.blocos-right .bloco-card{border-left:none;border-radius:0 14px 14px 0}
+.bloco-card{background:rgba(10,14,40,.7);border:1px solid var(--line2);padding:14px 16px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(10px);position:relative;transition:.25s}
+.blocos-left .bloco-card{border-right:none}
+.blocos-right .bloco-card{border-left:none;flex-direction:row}
+.bc-tools{border-left:2px solid var(--blue)}
+.bc-cog{border-left:2px solid var(--lilac)}
+.bc-ctx{border-left:2px solid var(--coral)}
+.bc-skills{border-right:2px solid var(--org)}
+.bc-rot{border-right:2px solid var(--ok)}
+.bc-icon{font-size:24px;flex:none}
+.bc-content{flex:1;min-width:0}
+.bc-name{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink)}
+.bc-sub{font-size:11.5px;color:var(--mut);line-height:1.4;margin-top:2px}
+.bc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.bc-tags span{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:999px;background:rgba(96,111,239,.15);color:#a0aaff;border:1px solid rgba(96,111,239,.25)}
+.bc-steps{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.bc-steps span{font-family:var(--mono);font-size:10px;color:var(--ok)}
+.bc-arrow{font-size:18px;color:rgba(150,162,230,.35);flex:none}
+.bc-arrow-right{margin-left:auto}
+.bc-arrow-left{order:-1}
+/* núcleo */
+.blocos-center{display:flex;align-items:center;justify-content:center}
+.agente-core{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center}
+.agente-ring{position:absolute;border-radius:50%;border:1px solid}
+.agente-ring-outer{width:140px;height:140px;border-color:rgba(254,80,0,.25);animation:spin 20s linear infinite}
+.agente-ring-mid{width:104px;height:104px;border-color:rgba(216,179,253,.3);animation:spin 14s linear infinite reverse}
+.agente-nucleus{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(254,80,0,.2),rgba(216,179,253,.15));border:1px solid rgba(254,80,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;backdrop-filter:blur(10px)}
+.agente-glyph{font-size:22px;color:var(--org);line-height:1}
+.agente-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ─── SLIDE 7 — UI MOCKUP REAL ─── */
+.mock-tabs{display:flex;align-items:center;gap:2px;margin:0 auto}
+.mock-tab{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;font-size:11px;color:#4a5280;cursor:pointer;font-family:var(--sans)}
+.mock-tab-active{background:#1e2740;color:#c9d1e8;font-weight:600}
+.mt-icon{font-size:11px}
+.mock-body2{display:grid;grid-template-columns:200px 1fr;height:300px}
+/* sidebar 2 */
+.mock-sidebar2{background:#0a0d18;border-right:1px solid #1e2740;padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.ms2-item{font-size:10.5px;color:#6b7db3;padding:5px 8px;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.ms2-item:hover{background:#141c2e;color:#c9d1e8}
+.ms2-new{color:#c9d1e8;font-weight:600;margin-bottom:4px}
+.ms2-sep{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#2a3050;padding:8px 8px 4px}
+.ms2-sm{font-size:10px;color:#3a4870;padding:3px 8px}
+.ms2-reiniciar{display:flex;align-items:center;gap:8px;background:#141c2e;border:1px solid #1e2740;border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer}
+.ms2-footer{display:flex;flex-direction:column;gap:4px;padding:6px 0 0;border-top:1px solid #1e2740}
+.ms2-user{display:flex;align-items:center;gap:6px;padding:4px 6px}
+.ms2-avatar{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--org),var(--coral));display:grid;place-items:center;font-size:8px;font-weight:700;color:#1a0a00;flex:none}
+.ms2-plan{font-family:var(--mono);font-size:9px;background:rgba(254,80,0,.15);color:var(--org2);border:1px solid rgba(254,80,0,.25);border-radius:4px;padding:1px 5px;margin-left:auto}
+/* main area */
+.mock-main{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px 24px;background:#111827}
+.mock-greeting{display:flex;align-items:center;gap:10px}
+.mock-asterisk{font-size:22px;color:var(--org)}
+.mock-greet-text{font-size:16px;font-weight:600;color:#e8eaf0;font-family:var(--sans)}
+.mock-banner{display:flex;align-items:center;gap:8px;background:#1a1f30;border:1px solid #2a3050;border-radius:8px;padding:8px 12px;font-size:10.5px;color:#9aa3d8;width:100%}
+.mock-banner-link{color:#a0aaff;cursor:pointer;text-decoration:underline;white-space:nowrap}
+.mock-banner-x{margin-left:auto;color:#4a5280;cursor:pointer}
+.mock-input2{background:#1a1f30;border:1px solid #2a3050;border-radius:12px;padding:12px 14px;width:100%;display:flex;flex-direction:column;gap:10px}
+.mock-input2-field{font-size:11px;color:#4a5280;min-height:28px}
+.mock-input2-footer{display:flex;align-items:center;gap:8px}
+.mi2-plus{width:22px;height:22px;border-radius:50%;border:1px solid #2a3050;display:grid;place-items:center;font-size:13px;color:#6b7db3;cursor:pointer}
+.mi2-model{font-family:var(--mono);font-size:9px;color:#9aa3d8;background:#242d45;border:1px solid #2a3050;border-radius:6px;padding:3px 8px}
+.mi2-icon{font-size:14px;color:#4a5280;cursor:pointer}
+.mock-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.mock-action{font-size:10px;color:#9aa3d8;background:#1a1f30;border:1px solid #2a3050;border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+.mock-action:hover{border-color:#4a5280;color:#c9d1e8}
+/* reposiciona anotações para o novo layout */
+.annot-sidebar{left:-215px;top:70px}
+.annot-model{right:-210px;top:30px}
+.annot-input{left:-205px;bottom:60px}
+.annot-artifact{right:-210px;bottom:30px}
+
+/* ─── MOBILE ─── */
+.ui-mockup-wrap{position:relative;width:100%;max-width:880px;margin-top:8px}
+.ui-mockup{background:#0d1117;border:1px solid #2a3050;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.mock-titlebar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#111827;border-bottom:1px solid #1e2740}
+.mock-dots{display:flex;gap:6px}
+.mock-dots span{width:10px;height:10px;border-radius:50%;background:#2a3050}
+.mock-dots span:nth-child(1){background:#ff5f57}
+.mock-dots span:nth-child(2){background:#febc2e}
+.mock-dots span:nth-child(3){background:#28c840}
+.mock-url{font-family:var(--mono);font-size:11px;color:#4a5280;margin:0 auto}
+.mock-body{display:grid;grid-template-columns:180px 1fr 200px;height:320px}
+.mock-sidebar{background:#0a0d18;border-right:1px solid #1e2740;padding:12px 10px;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.mock-logo-sm{font-family:var(--disp);font-weight:800;font-size:13px;color:#fff;margin-bottom:8px;padding:0 4px}
+.mock-new-btn{font-size:11px;color:#FE5000;border:1px solid rgba(254,80,0,.3);border-radius:6px;padding:5px 8px;text-align:center;margin-bottom:8px;cursor:pointer}
+.mock-section-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#3a4266;padding:4px 4px 2px}
+.mock-item{font-size:11px;color:#6b7db3;padding:5px 8px;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.mock-item:hover,.active-item{background:#1a2240;color:#c9d1e8}
+.mock-chat{display:flex;flex-direction:column;border-right:1px solid #1e2740}
+.mock-model-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #1e2740}
+.mock-model-tag{font-family:var(--mono);font-size:10px;color:#9aa3d8;background:#141c2e;border:1px solid #2a3050;border-radius:4px;padding:3px 8px;cursor:pointer}
+.mock-tools-tag{font-family:var(--mono);font-size:10px;color:#FE5000;background:rgba(254,80,0,.1);border:1px solid rgba(254,80,0,.2);border-radius:4px;padding:3px 8px}
+.mock-messages{flex:1;padding:12px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.mock-msg{font-size:11px;line-height:1.5;border-radius:8px;padding:8px 10px;max-width:90%}
+.user-msg{background:rgba(96,111,239,.15);border:1px solid rgba(96,111,239,.25);color:#c9d1e8;align-self:flex-end}
+.ai-msg{display:flex;align-items:flex-start;gap:8px;color:#9aa3d8}
+.mock-ai-dot{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#FE5000,#FFA38D);flex:none;margin-top:2px}
+.mock-artifact-pill{margin-top:6px;font-size:10px;color:#FE5000;background:rgba(254,80,0,.08);border:1px solid rgba(254,80,0,.2);border-radius:4px;padding:4px 8px;cursor:pointer}
+.mock-input-bar{padding:8px 12px;border-top:1px solid #1e2740}
+.mock-input-field{display:flex;align-items:center;justify-content:space-between;background:#141c2e;border:1px solid #2a3050;border-radius:8px;padding:6px 10px}
+.mock-input-icons{display:flex;align-items:center;gap:8px;font-size:14px;color:#4a5280}
+.mock-send{background:#FE5000;color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;cursor:pointer}
+.mock-artifact-panel{background:#080e1a;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mock-ap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.mock-ap-btn{font-family:var(--mono);font-size:9px;color:#4a5280;background:#141c2e;border:1px solid #2a3050;border-radius:4px;padding:2px 6px;cursor:pointer}
+/* anotações */
+.annot{position:absolute;display:flex;align-items:center;gap:6px;pointer-events:none}
+.annot-box{background:rgba(254,80,0,.12);border:1px solid rgba(254,80,0,.3);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--ink);line-height:1.4;white-space:nowrap}
+.annot-box b{color:var(--org2);display:block;margin-bottom:2px}
+.annot-line{width:30px;height:1px;background:rgba(254,80,0,.4)}
+.annot-sidebar{left:-210px;top:80px;flex-direction:row-reverse}
+.annot-sidebar .annot-line{width:28px}
+.annot-model{right:-210px;top:55px;flex-direction:row}
+.annot-input{left:-195px;bottom:52px;flex-direction:row-reverse}
+.annot-input .annot-line{width:20px}
+.annot-artifact{right:-210px;bottom:80px;flex-direction:row}
+
+/* ─── SLIDE 6 — CHAT vs COWORK vs CODE ─── */
+.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px}
+.three-card{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:22px 18px;backdrop-filter:blur(10px);position:relative;display:flex;flex-direction:column;gap:10px}
+.chat-card{border-top:3px solid var(--blue)}
+.cowork-card{border-top:3px solid var(--org);background:rgba(254,80,0,.05)}
+.code-card{border-top:3px solid var(--ok)}
+.tc-badge{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:rgba(254,80,0,.18);color:var(--org2);border:1px solid rgba(254,80,0,.3);border-radius:999px;padding:3px 8px}
+.tc-icon{font-size:28px}
+.tc-name{font-family:var(--disp);font-weight:800;font-size:17px}
+.tc-url{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.1em}
+.tc-desc{font-size:12.5px;color:var(--mut);line-height:1.5}
+.tc-feats{display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.tc-feat{font-size:12px;color:var(--ink)}
+.tc-feat.muted{color:#4a5280}
+.tc-feat b{color:var(--coral)}
+.tc-for{font-family:var(--mono);font-size:10px;color:var(--org);letter-spacing:.08em;margin-top:auto;padding-top:6px;border-top:1px solid var(--line)}
+
+/* ─── MOBILE ─── */
+@media(max-width:760px){
+  .card-grid{grid-template-columns:1fr}
+  .compare-wrap{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .vs-divider{padding:14px 0}
+  .versus-grid{grid-template-columns:1fr}
+  .powers-grid{grid-template-columns:1fr 1fr}
+  .conn-grid{grid-template-columns:repeat(2,1fr)}
+  .artifacts-layout{grid-template-columns:1fr}
+  .skills-layout{grid-template-columns:1fr}
+  .hdr{padding:14px 20px}
+  .slide{padding:80px 20px 80px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="logo-sig">Fernando<span>Junior</span></div>
+  <div class="hdr-right">
+    <span class="slide-counter" id="counter"><b>01</b> / 08</span>
+  </div>
+</header>
+<div class="progress"><div class="progress-fill" id="progress" style="width:12.5%"></div></div>
+
+<!-- APP -->
+<div id="app">
+  <div class="bg-layer">
+    <div class="bg-orb orb1"></div>
+    <div class="bg-orb orb2"></div>
+    <div class="bg-orb orb3"></div>
+  </div>
+
+  <div class="slides">
+
+    <!-- ── SLIDE 1 — INTRO ── -->
+    <div class="slide active" data-slide="1">
+      <p class="s1-eyebrow fade-up vis">Apresentação Interativa · 2026</p>
+      <h1 class="s1-title fade-up vis delay-1">
+        <em>Olá,</em><br>eu sou o <strong>Claude</strong>
+      </h1>
+      <p class="s1-sub fade-up vis delay-2">Uma inteligência artificial criada pela Anthropic — e esta apresentação vai te mostrar exatamente o que isso significa.</p>
+      <div class="s1-chips fade-up vis delay-3">
+        <span class="chip">Criado pela <b>Anthropic</b></span>
+        <span class="chip">Lançado em <b>2023</b></span>
+        <span class="chip">Modelo <b>Claude Sonnet 4.6</b></span>
+        <span class="chip">Disponível via <b>GUI & CLI</b></span>
+      </div>
+      <p class="s1-scroll fade-up vis delay-4">▼ navegue com as setas</p>
+    </div>
+
+    <!-- ── SLIDE 2 — SOBRE CLAUDE ── -->
+    <div class="slide" data-slide="2">
+      <p class="s-label fade-up">Capítulo 01</p>
+      <h2 class="s-title fade-up delay-1">Quem é o <b>Claude</b>?</h2>
+      <div class="card-grid fade-up delay-2">
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Modelo de Linguagem</div>
+          <div class="card-body">Treinado em <b>bilhões de textos</b> para entender e gerar linguagem humana com precisão e nuance.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-title">IA Constitucional</div>
+          <div class="card-body">Guiado por princípios de <b>honestidade, segurança e utilidade</b>. Projetado para ser inofensivo e genuíno.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <div class="card-title">Assistente de Tarefas</div>
+          <div class="card-body">Analisa problemas complexos, escreve código, redige textos, <b>executa projetos completos</b> de ponta a ponta.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📚</div>
+          <div class="card-title">Contexto Longo</div>
+          <div class="card-body">Processa e lembra de <b>200 mil tokens</b> numa conversa — equivale a um livro inteiro de contexto.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-title">Extensível via MCP</div>
+          <div class="card-body">Conecta-se a sistemas externos via <b>Model Context Protocol</b> — bancos, APIs, arquivos, navegadores.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Multi-Agente</div>
+          <div class="card-body">Orquestra <b>squads de agentes</b> especializados que trabalham em paralelo em tarefas complexas.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 3 — GUI vs CLI ── -->
+    <div class="slide" data-slide="3">
+      <p class="s-label fade-up">Capítulo 02</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center">GUI <b>vs</b> CLI</h2>
+      <div class="compare-wrap fade-up delay-2">
+        <div class="col-card gui-card">
+          <div class="col-head">
+            <span class="col-tag tag-gui">GUI</span>
+          </div>
+          <div class="col-name" style="color:#a0aaff">claude.ai</div>
+          <p class="col-sub">Interface gráfica acessada pelo navegador. Clique, arraste e converse.</p>
+          <ul class="feat-list gui-list">
+            <li><b>Visual e intuitivo</b> — zero configuração</li>
+            <li>Upload de <b>arquivos, imagens e PDFs</b></li>
+            <li>Projetos com <b>memória persistente</b></li>
+            <li>Artefatos renderizados <b>ao vivo</b></li>
+            <li>Ideal para uso <b>casual e rápido</b></li>
+          </ul>
+        </div>
+
+        <div class="vs-divider">
+          <div class="vs-badge">VS</div>
+        </div>
+
+        <div class="col-card cli-card">
+          <div class="col-head">
+            <span class="col-tag tag-cli">CLI</span>
+          </div>
+          <div class="col-name" style="color:var(--org2)">Claude Code</div>
+          <p class="col-sub">Terminal com poderes. Opera diretamente no seu sistema de arquivos e ferramentas.</p>
+          <ul class="feat-list cli-list">
+            <li><b>Lê, edita e cria</b> arquivos reais</li>
+            <li>Executa <b>comandos no terminal</b></li>
+            <li>Integra com <b>git, npm, docker</b></li>
+            <li>Orquestra <b>agentes em paralelo</b></li>
+            <li>Ideal para <b>desenvolvimento profissional</b></li>
+          </ul>
+          <div class="cli-demo">
+            <span class="prompt">$ </span><span class="cmd">claude "Crie uma API REST para vendas"</span>
+            <div class="out">✓ Analisando projeto…<br>✓ Criando src/api/vendas.ts<br>✓ Adicionando testes…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 4 — ChatGPT vs Claude ── -->
+    <div class="slide" data-slide="4">
+      <p class="s-label fade-up">Capítulo 03</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center"><b>ChatGPT</b> vs <b>Claude</b></h2>
+      <div class="versus-grid fade-up delay-2">
+        <div class="v-card gpt-card">
+          <div class="v-logo" style="color:#19c37d">ChatGPT</div>
+          <div class="v-maker">OpenAI · GPT-4o / o1</div>
+          <div class="v-rows">
+            <div class="v-row">
+              <span class="v-row-label">Criador</span>
+              <span class="v-row-val">OpenAI (Microsoft)</span>
+            </div>
+            <div class="v-row">
+              <span class="v-row-label">Pontos Fortes</span>
+              <span class="v-row-val">Plugins, DALL-E integrado, grande ecossistema de GPTs customizados</span>
+            </div>
+            <div class="v-row">
+              <span class="v-row-label">Contexto</span>
+              <span class="v-row-val">128k tokens</span>
+            </div>
+            <div class="v-row">
+              <span class="v-row-label">Raciocínio Longo</span>
+              <span class="v-row-val">Modelo o1 / o3 separado</span>
+            </div>
+            <div class="v-row">
+              <span class="v-row-label">Código</span>
+              <span class="v-row-val">Bom — mas sem acesso direto ao sistema</span>
+            </div>
+          </div>
+        </div>
+        <div class="v-card claude-card">
+          <div class="v-logo" style="color:var(--coral)">Claude</div>
+          <div class="v-maker">Anthropic · Claude Sonnet 4.6</div>
+          <div class="v-rows">
+            <div class="v-row">
+              <span class="v-row-label">Criador</span>
+              <span class="v-row-val">Anthropic (Google / independente)</span>
+            </div>
+            <div class="v-row highlight-row">
+              <span class="v-row-label">Pontos Fortes</span>
+              <span class="v-row-val"><b>Raciocínio profundo, código real no terminal, artefatos interativos, multi-agente</b></span>
+            </div>
+            <div class="v-row highlight-row">
+              <span class="v-row-label">Contexto</span>
+              <span class="v-row-val"><b>200k tokens</b> — o maior da categoria</span>
+            </div>
+            <div class="v-row highlight-row">
+              <span class="v-row-label">Raciocínio Longo</span>
+              <span class="v-row-val"><b>Integrado</b> — pensa antes de responder no mesmo modelo</span>
+            </div>
+            <div class="v-row highlight-row">
+              <span class="v-row-label">Código</span>
+              <span class="v-row-val"><b>Claude Code</b> — executa, testa, faz commit no seu projeto real</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 5 — 3 NÍVEIS DE MATURIDADE ── -->
+    <div class="slide" data-slide="5">
+      <p class="s-label fade-up">Capítulo 04</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center">Os <b>3 níveis</b> de uso da IA</h2>
+      <div class="niveis-grid fade-up delay-2">
+
+        <div class="nivel-card nivel-1">
+          <div class="nivel-badge">Nível 1</div>
+          <div class="nivel-icon">💬</div>
+          <div class="nivel-title">IA como chat</div>
+          <div class="nivel-desc">Você pergunta, escreve e resume na IA. Útil, mas você continua operando tudo na mão.</div>
+          <div class="nivel-example">
+            <div class="ne-label">Como funciona</div>
+            <div class="ne-row"><span class="ne-dot n1-dot"></span>Você faz uma pergunta</div>
+            <div class="ne-row"><span class="ne-dot n1-dot"></span>Claude responde</div>
+            <div class="ne-row"><span class="ne-dot n1-dot"></span>Você copia e usa</div>
+          </div>
+          <div class="nivel-footer n1-footer">Você ainda é o executor</div>
+        </div>
+
+        <div class="nivel-card nivel-2">
+          <div class="nivel-badge n2-badge">Nível 2</div>
+          <div class="nivel-icon">🤖</div>
+          <div class="nivel-title">Criando e usando agentes</div>
+          <div class="nivel-desc">Você cria Agentes que executam rotinas de ponta a ponta. Sai do fazer, entra no revisar.</div>
+          <div class="nivel-example">
+            <div class="ne-label">Como funciona</div>
+            <div class="ne-row"><span class="ne-dot n2-dot"></span>Você define a tarefa</div>
+            <div class="ne-row"><span class="ne-dot n2-dot"></span>O Agente executa</div>
+            <div class="ne-row"><span class="ne-dot n2-dot"></span>Você revisa e aprova</div>
+          </div>
+          <div class="nivel-footer n2-footer">Você vira revisor e estrategista</div>
+        </div>
+
+        <div class="nivel-card nivel-3">
+          <div class="nivel-badge n3-badge">Nível 3</div>
+          <div class="nivel-icon">🏢</div>
+          <div class="nivel-title">Empresa Agêntica</div>
+          <div class="nivel-desc">Humanos e Agentes operando juntos sobre um segundo cérebro. O dono vira orquestrador do time híbrido.</div>
+          <div class="nivel-example">
+            <div class="ne-label">Como funciona</div>
+            <div class="ne-row"><span class="ne-dot n3-dot"></span>Agentes trabalham 24h</div>
+            <div class="ne-row"><span class="ne-dot n3-dot"></span>Sistemas se comunicam</div>
+            <div class="ne-row"><span class="ne-dot n3-dot"></span>Humanos orquestram</div>
+          </div>
+          <div class="nivel-footer n3-footer">Você vira CEO do time híbrido</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SLIDE 6 — 5 BLOCOS DE UM AGENTE ── -->
+    <div class="slide" data-slide="6">
+      <p class="s-label fade-up">Como um agente funciona</p>
+      <h2 class="s-title fade-up delay-1">Os <b>5 blocos</b> de um Agente de IA</h2>
+
+      <div class="blocos-wrap fade-up delay-2">
+        <!-- coluna esquerda -->
+        <div class="blocos-col blocos-left">
+          <div class="bloco-card bc-tools">
+            <div class="bc-icon">⚙️</div>
+            <div class="bc-content">
+              <div class="bc-name">Tools</div>
+              <div class="bc-sub">onde ele age</div>
+              <div class="bc-tags">
+                <span>WhatsApp</span><span>Telegram</span><span>Planilha</span>
+              </div>
+            </div>
+            <div class="bc-arrow bc-arrow-right">→</div>
+          </div>
+          <div class="bloco-card bc-cog">
+            <div class="bc-icon">🧠</div>
+            <div class="bc-content">
+              <div class="bc-name">Cognição</div>
+              <div class="bc-sub">o modelo de IA que raciocina</div>
+            </div>
+            <div class="bc-arrow bc-arrow-right">→</div>
+          </div>
+          <div class="bloco-card bc-ctx">
+            <div class="bc-icon">📖</div>
+            <div class="bc-content">
+              <div class="bc-name">Contexto</div>
+              <div class="bc-sub">tudo o que ele sabe da sua empresa</div>
+            </div>
+            <div class="bc-arrow bc-arrow-right">→</div>
+          </div>
+        </div>
+
+        <!-- centro — robô / núcleo -->
+        <div class="blocos-center">
+          <div class="agente-core">
+            <div class="agente-ring agente-ring-outer"></div>
+            <div class="agente-ring agente-ring-mid"></div>
+            <div class="agente-nucleus">
+              <div class="agente-glyph">✦</div>
+              <div class="agente-label">Agente</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- coluna direita -->
+        <div class="blocos-col blocos-right">
+          <div class="bloco-card bc-skills">
+            <div class="bc-arrow bc-arrow-left">←</div>
+            <div class="bc-icon">✨</div>
+            <div class="bc-content">
+              <div class="bc-name">Skills</div>
+              <div class="bc-sub">habilidades prontas que ele executa</div>
+            </div>
+          </div>
+          <div class="bloco-card bc-rot">
+            <div class="bc-arrow bc-arrow-left">←</div>
+            <div class="bc-icon">🔄</div>
+            <div class="bc-content">
+              <div class="bc-name">Rotina</div>
+              <div class="bc-sub">o passo a passo que ele repete</div>
+              <div class="bc-steps">
+                <span>✓ Passo 1</span><span>✓ Passo 2</span><span>✓ Passo 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 7 — INTERFACE DO CHAT ── -->
+    <div class="slide" data-slide="7">
+      <p class="s-label fade-up">Capítulo 06</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center">A interface do <b>Claude.ai</b></h2>
+      <div class="ui-mockup-wrap fade-up delay-2">
+
+        <div class="ui-mockup">
+          <!-- barra de título macOS -->
+          <div class="mock-titlebar">
+            <div class="mock-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+            <!-- abas Chat / Cowork / Code -->
+            <div class="mock-tabs">
+              <div class="mock-tab mock-tab-active">
+                <span class="mt-icon">💬</span> Chat
+              </div>
+              <div class="mock-tab">
+                <span class="mt-icon">🤝</span> Cowork
+              </div>
+              <div class="mock-tab">
+                <span class="mt-icon" style="font-size:9px">&lt;/&gt;</span> Code
+              </div>
+            </div>
+          </div>
+
+          <div class="mock-body2">
+            <!-- sidebar -->
+            <div class="mock-sidebar2">
+              <div class="ms2-item ms2-new">+ Novo bate-papo</div>
+              <div class="ms2-item">📁 Projetos</div>
+              <div class="ms2-item">🖼️ Artefatos</div>
+              <div class="ms2-item">🎨 Personalizar</div>
+              <div class="ms2-sep">Recentes</div>
+              <div class="ms2-item ms2-sm">Apresentação de IA para vendas…</div>
+              <div class="ms2-item ms2-sm">Tendências de busca entre conta…</div>
+              <div class="ms2-item ms2-sm">Localização de cláusula de back…</div>
+              <div class="ms2-item ms2-sm">Reescrita para apresentação de v…</div>
+              <div class="ms2-item ms2-sm">Meio do ano de 2026</div>
+              <div class="ms2-item ms2-sm">Gratidão pela parceria com meu…</div>
+              <div class="ms2-item ms2-sm">Planilha de dados RD Station…</div>
+              <div style="flex:1"></div>
+              <div class="ms2-reiniciar">
+                <div style="font-size:16px">✳</div>
+                <div>
+                  <div style="font-size:10px;font-weight:600;color:#c9d1e8">Reiniciar para atualizar</div>
+                  <div style="font-size:9px;color:#4a5280">v1.159962.1</div>
+                </div>
+                <div style="margin-left:auto;font-size:12px;color:#4a5280">→</div>
+              </div>
+              <div class="ms2-footer">
+                <div style="font-size:11px;color:#6b7db3">🎨 Design</div>
+                <div class="ms2-user">
+                  <div class="ms2-avatar">FJ</div>
+                  <span style="font-size:11px;color:#c9d1e8">Fernando</span>
+                  <span class="ms2-plan">Max</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- área principal -->
+            <div class="mock-main">
+              <!-- saudação -->
+              <div class="mock-greeting">
+                <span class="mock-asterisk">✳</span>
+                <span class="mock-greet-text">Boa madrugada, Fernando</span>
+              </div>
+
+              <!-- banner aviso -->
+              <div class="mock-banner">
+                <span>Claude Fable 5 está indisponível no momento.</span>
+                <span class="mock-banner-link">Saiba mais</span>
+                <span class="mock-banner-x">✕</span>
+              </div>
+
+              <!-- input box -->
+              <div class="mock-input2">
+                <div class="mock-input2-field">Digite <span style="color:#a0aaff">/ para habilidades</span></div>
+                <div class="mock-input2-footer">
+                  <span class="mi2-plus">+</span>
+                  <div style="flex:1"></div>
+                  <span class="mi2-model">Opus 4.8 · Alto ∨</span>
+                  <span class="mi2-icon">🎤</span>
+                  <span class="mi2-icon">〰</span>
+                </div>
+              </div>
+
+              <!-- quick actions -->
+              <div class="mock-actions">
+                <div class="mock-action">✏️ Escrever</div>
+                <div class="mock-action">🎓 Aprender</div>
+                <div class="mock-action">&lt;/&gt; Código</div>
+                <div class="mock-action">☕ Assuntos pessoais</div>
+                <div class="mock-action">🔵 Do Drive</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANOTAÇÕES -->
+        <div class="annot annot-sidebar">
+          <div class="annot-line"></div>
+          <div class="annot-box"><b>① Sidebar</b><br>Histórico, Projetos, Artefatos e Personalizar</div>
+        </div>
+        <div class="annot annot-model">
+          <div class="annot-box" style="text-align:right"><b>② Abas de modo</b><br>Chat · Cowork · Code</div>
+          <div class="annot-line"></div>
+        </div>
+        <div class="annot annot-input">
+          <div class="annot-line"></div>
+          <div class="annot-box"><b>③ Input + Modelo</b><br>Digite, use /skills e selecione Opus/Sonnet</div>
+        </div>
+        <div class="annot annot-artifact">
+          <div class="annot-box" style="text-align:right"><b>④ Habilidades rápidas</b><br>Escrever, Aprender, Código, Drive…</div>
+          <div class="annot-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 8 — CHAT vs COWORK vs CODE ── -->
+    <div class="slide" data-slide="8">
+      <p class="s-label fade-up">Capítulo 05</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center">Chat · Cowork · <b>Code</b></h2>
+      <div class="three-grid fade-up delay-2">
+
+        <div class="three-card chat-card">
+          <div class="tc-icon">💬</div>
+          <div class="tc-name">Chat</div>
+          <div class="tc-url">claude.ai/chat</div>
+          <div class="tc-desc">Conversa direta e pontual. Cada sessão começa do zero — sem memória automática entre conversas.</div>
+          <div class="tc-feats">
+            <div class="tc-feat">✓ Perguntas e respostas rápidas</div>
+            <div class="tc-feat">✓ Upload de arquivos por sessão</div>
+            <div class="tc-feat">✓ Artefatos gerados ao vivo</div>
+            <div class="tc-feat muted">✗ Sem memória entre sessões</div>
+            <div class="tc-feat muted">✗ Sem contexto de projeto</div>
+          </div>
+          <div class="tc-for">Para quem: uso casual, dúvidas pontuais</div>
+        </div>
+
+        <div class="three-card cowork-card">
+          <div class="tc-badge">⭐ Recomendado</div>
+          <div class="tc-icon">🗂️</div>
+          <div class="tc-name">Cowork / Projetos</div>
+          <div class="tc-url">claude.ai → Projetos</div>
+          <div class="tc-desc">Workspace persistente com memória de projeto. O Claude lembra do seu negócio, estilo e preferências entre sessões.</div>
+          <div class="tc-feats">
+            <div class="tc-feat">✓ <b>Memória persistente</b> de projeto</div>
+            <div class="tc-feat">✓ Arquivos e docs compartilhados</div>
+            <div class="tc-feat">✓ Instruções customizadas fixas</div>
+            <div class="tc-feat">✓ Contexto acumulado entre sessões</div>
+            <div class="tc-feat">✓ Colaboração em equipe</div>
+          </div>
+          <div class="tc-for">Para quem: trabalho profissional diário</div>
+        </div>
+
+        <div class="three-card code-card">
+          <div class="tc-icon">⌨️</div>
+          <div class="tc-name">Claude Code</div>
+          <div class="tc-url">Terminal · CLI</div>
+          <div class="tc-desc">Acesso total ao sistema. Lê arquivos reais, executa comandos, faz commits, orquestra agentes em paralelo.</div>
+          <div class="tc-feats">
+            <div class="tc-feat">✓ <b>Lê e edita</b> seu projeto real</div>
+            <div class="tc-feat">✓ Executa terminal, git, npm</div>
+            <div class="tc-feat">✓ Orquestra squads de agentes</div>
+            <div class="tc-feat">✓ Conecta a MCPs externos</div>
+            <div class="tc-feat">✓ Ideal para desenvolvimento</div>
+          </div>
+          <div class="tc-for">Para quem: devs e power users</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SLIDE 9 — O QUE CLAUDE FAZ ── -->
+    <div class="slide" data-slide="9">
+      <p class="s-label fade-up">Capítulo 06</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center">O que eu <b>faço</b>?</h2>
+      <div class="powers-grid fade-up delay-2">
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">✍️</div>
+          <div class="p-title">Escreve e Edita</div>
+          <div class="p-desc">E-mails, propostas, contratos, roteiros, copy de vendas, ementas, apresentações. Em qualquer tom e formato.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">💻</div>
+          <div class="p-title">Programa Sistemas</div>
+          <div class="p-desc">Cria aplicações, APIs, sites, scripts, automações e dashboards. Lê seu repositório, entende o contexto e implementa.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">🔍</div>
+          <div class="p-title">Pesquisa e Analisa</div>
+          <div class="p-desc">Busca na web, lê documentos, analisa concorrentes, processa planilhas e sintetiza relatórios executivos.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">🤖</div>
+          <div class="p-title">Orquestra Agentes</div>
+          <div class="p-desc">Gerencia squads de IAs especializadas — PM, Dev, QA, Designer — que trabalham em paralelo em projetos complexos.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">📊</div>
+          <div class="p-title">Raciocina e Decide</div>
+          <div class="p-desc">Decompõe problemas complexos, avalia opções, identifica riscos e recomenda estratégias com fundamento.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+        <div class="power-card" onclick="togglePower(this)">
+          <div class="p-icon">🔗</div>
+          <div class="p-title">Conecta Sistemas</div>
+          <div class="p-desc">Via MCP conecta ao seu CRM, banco de dados, e-mail, redes sociais, Google Drive e centenas de APIs.</div>
+          <div class="p-tag">clique para saber mais</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 10 — ARTEFATOS ── -->
+    <div class="slide" data-slide="10">
+      <p class="s-label fade-up">Capítulo 07</p>
+      <h2 class="s-title fade-up delay-1"><b>Artefatos</b></h2>
+      <div class="artifacts-layout fade-up delay-2">
+        <div class="art-left">
+          <div class="art-item sel" onclick="selectArtifact(this,'code')">
+            <div class="a-icon">⌨️</div>
+            <div class="a-text">
+              <div class="a-title">Código</div>
+              <div class="a-sub">TypeScript, Python, SQL, HTML, CSS — código funcional e testável</div>
+            </div>
+          </div>
+          <div class="art-item" onclick="selectArtifact(this,'doc')">
+            <div class="a-icon">📄</div>
+            <div class="a-text">
+              <div class="a-title">Documentos</div>
+              <div class="a-sub">Contratos, propostas, ementas, relatórios e manuais</div>
+            </div>
+          </div>
+          <div class="art-item" onclick="selectArtifact(this,'ui')">
+            <div class="a-icon">🎨</div>
+            <div class="a-text">
+              <div class="a-title">Interfaces Visuais</div>
+              <div class="a-sub">Dashboards, formulários e componentes HTML interativos</div>
+            </div>
+          </div>
+          <div class="art-item" onclick="selectArtifact(this,'data')">
+            <div class="a-icon">📊</div>
+            <div class="a-text">
+              <div class="a-title">Análises e Gráficos</div>
+              <div class="a-sub">Tabelas, diagramas, mapas e visualizações de dados</div>
+            </div>
+          </div>
+        </div>
+        <div class="art-preview" id="art-preview">
+          <div class="ap-label">Preview — Código</div>
+          <div class="ap-content">Gera código real, não pseudocódigo. O artefato fica visível no painel lateral e pode ser copiado, editado e executado.
+          <div class="ap-code"><span class="cm">// API de vendas gerada pelo Claude</span><br><span class="kw">export async function</span> <span class="fn">criarVenda</span>(dados: Venda) {<br>&nbsp;&nbsp;<span class="kw">const</span> venda = <span class="kw">await</span> db.<span class="fn">insert</span>(<span class="str">'vendas'</span>, dados);<br>&nbsp;&nbsp;<span class="kw">await</span> crm.<span class="fn">notificar</span>(venda.clienteId);<br>&nbsp;&nbsp;<span class="kw">return</span> { id: venda.id, status: <span class="str">'ok'</span> };<br>}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 11 — CONEXÕES ── -->
+    <div class="slide" data-slide="11">
+      <p class="s-label fade-up">Capítulo 08</p>
+      <h2 class="s-title fade-up delay-1" style="text-align:center"><b>Conexões</b> via MCP</h2>
+      <div class="conn-grid fade-up delay-2">
+        <div class="conn-card">
+          <div class="cc-icon">📧</div>
+          <div class="cc-name">E-mail / Gmail</div>
+          <div class="cc-type">MCP · Comunicação</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">📱</div>
+          <div class="cc-name">WhatsApp</div>
+          <div class="cc-type">MCP · Mensageria</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">📅</div>
+          <div class="cc-name">Google Calendar</div>
+          <div class="cc-type">MCP · Agenda</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">💼</div>
+          <div class="cc-name">CRM / HubSpot</div>
+          <div class="cc-type">MCP · Vendas</div>
+        </div>
+
+        <div class="conn-card" style="grid-column:1/-1;background:rgba(254,80,0,.08);border-color:rgba(254,80,0,.3);padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:16px">
+          <span style="font-size:32px">🤖</span>
+          <div>
+            <div class="claude-badge">Claude</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--mut);letter-spacing:.15em;text-transform:uppercase">Ponto central de orquestração</div>
+          </div>
+        </div>
+
+        <div class="conn-card">
+          <div class="cc-icon">🗄️</div>
+          <div class="cc-name">Banco de Dados</div>
+          <div class="cc-type">MCP · SQL / Postgres</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">📂</div>
+          <div class="cc-name">Google Drive</div>
+          <div class="cc-type">MCP · Arquivos</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">🌐</div>
+          <div class="cc-name">Web / APIs</div>
+          <div class="cc-type">MCP · Pesquisa</div>
+        </div>
+        <div class="conn-card">
+          <div class="cc-icon">📊</div>
+          <div class="cc-name">Meta Ads</div>
+          <div class="cc-type">MCP · Marketing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 12 — FINAL ── -->
+    <div class="slide" data-slide="12">
+      <h2 class="final-title fade-up vis">
+        <span>Tudo isso</span><br>em <strong>uma ferramenta</strong>
+      </h2>
+      <p class="final-sub fade-up vis delay-1">Claude não é um chatbot. É uma plataforma de inteligência que se integra ao seu fluxo de trabalho e escala com você.</p>
+      <div class="final-sig fade-up vis delay-2">Fernando Junior</div>
+      <div class="cta-row fade-up vis delay-3">
+        <a href="index.html" class="btn btn-org">← Ver IA para Vendas</a>
+        <a href="agentes.html" class="btn btn-ghost">Laboratório de Agentes</a>
+      </div>
+      <div class="download-box fade-up vis delay-4">
+        <a href="squads-ia-para-vendas.zip" download class="btn-download">
+          <span class="dl-icon">⬇</span>
+          <span class="dl-text">
+            <strong>Baixar Material Completo</strong>
+            <small>Squads · Agentes · Tasks · Workflows</small>
+          </span>
+        </a>
+        <div class="dl-senha">🔐 Senha: <code>IA2706</code></div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+</div><!-- /app -->
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)" disabled>←</button>
+  <div id="dots"></div>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+const TOTAL = 12;
+let cur = 1;
+
+const artPreviews = {
+  code: {
+    label: 'Preview — Código',
+    html: `Gera código real, não pseudocódigo. O artefato fica visível no painel lateral e pode ser copiado, editado e executado.
+    <div class="ap-code"><span class="cm">// API de vendas gerada pelo Claude</span><br><span class="kw">export async function</span> <span class="fn">criarVenda</span>(dados: Venda) {<br>&nbsp;&nbsp;<span class="kw">const</span> venda = <span class="kw">await</span> db.<span class="fn">insert</span>(<span class="str">'vendas'</span>, dados);<br>&nbsp;&nbsp;<span class="kw">await</span> crm.<span class="fn">notificar</span>(venda.clienteId);<br>&nbsp;&nbsp;<span class="kw">return</span> { id: venda.id, status: <span class="str">'ok'</span> };<br>}</div>`
+  },
+  doc: {
+    label: 'Preview — Documentos',
+    html: `Produz documentos prontos para uso: contratos, propostas comerciais, ementas de cursos, políticas internas e muito mais.<br><br>
+    <div class="ap-code" style="font-family:var(--sans);font-size:13px"><b style="color:var(--coral)">PROPOSTA COMERCIAL Nº 001/2026</b><br><br>
+    Prezado Fernando Junior,<br><br>
+    Apresentamos nossa proposta para implementação do sistema de IA para vendas com foco em prospecção automatizada e follow-up inteligente...<br><br>
+    <span style="color:var(--mut)">— Gerado em 3 segundos com contexto do seu negócio</span></div>`
+  },
+  ui: {
+    label: 'Preview — Interfaces Visuais',
+    html: `Cria dashboards, formulários, landing pages e componentes HTML/CSS/JS completos e interativos — renderizados ao vivo no painel.<br><br>
+    <div style="background:#0a0e1a;border-radius:10px;padding:14px 16px;margin-top:10px">
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <div style="flex:1;background:rgba(254,80,0,.12);border:1px solid rgba(254,80,0,.2);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em">Leads</div>
+        <div style="font-size:22px;font-weight:700;color:var(--org)">247</div>
+      </div>
+      <div style="flex:1;background:rgba(43,213,118,.1);border:1px solid rgba(43,213,118,.2);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em">Fechados</div>
+        <div style="font-size:22px;font-weight:700;color:var(--ok)">38</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--mut);text-align:center">Dashboard gerado pelo Claude em tempo real</div></div>`
+  },
+  data: {
+    label: 'Preview — Análises e Gráficos',
+    html: `Analisa dados, identifica padrões, cria visualizações SVG, tabelas e diagramas Mermaid que explicam resultados de forma clara.<br><br>
+    <div class="ap-code"><span class="cm">// Claude analisa sua planilha de vendas</span><br>Período: Jan–Jun 2026<br><span class="kw">Crescimento</span>: <span class="str">+34%</span> vs mesmo período 2025<br><span class="kw">Top produto</span>: <span class="str">Consultoria Tributária</span><br><span class="kw">Ticket médio</span>: <span class="str">R$ 4.820</span><br><span class="kw">Retenção</span>: <span class="str">91%</span> dos clientes ativos</div>`
+  }
+};
+
+function selectArtifact(el, key) {
+  document.querySelectorAll('.art-item').forEach(i => i.classList.remove('sel'));
+  el.classList.add('sel');
+  const preview = document.getElementById('art-preview');
+  const data = artPreviews[key];
+  preview.innerHTML = `<div class="ap-label">${data.label}</div><div class="ap-content">${data.html}</div>`;
+}
+
+function togglePower(el) {
+  el.classList.toggle('open');
+}
+
+function buildDots() {
+  const c = document.getElementById('dots');
+  c.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = document.createElement('button');
+    d.className = 'nav-dot' + (i === cur ? ' active' : '');
+    d.onclick = () => goTo(i);
+    c.appendChild(d);
+  }
+}
+
+function updateUI() {
+  document.getElementById('counter').innerHTML = `<b>${String(cur).padStart(2,'0')}</b> / ${String(TOTAL).padStart(2,'0')}`;
+  document.getElementById('progress').style.width = (cur / TOTAL * 100) + '%';
+  document.getElementById('btn-prev').disabled = cur === 1;
+  document.getElementById('btn-next').disabled = cur === TOTAL;
+  buildDots();
+}
+
+function goTo(n) {
+  if (n < 1 || n > TOTAL) return;
+  const prev = document.querySelector('.slide.active');
+  if (prev) { prev.classList.remove('active'); prev.classList.add('exit-up'); setTimeout(() => prev.classList.remove('exit-up'), 600); }
+  cur = n;
+  const next = document.querySelector(`[data-slide="${cur}"]`);
+  if (next) {
+    next.classList.add('active');
+    next.querySelectorAll('.fade-up').forEach(el => { el.classList.remove('vis'); setTimeout(() => el.classList.add('vis'), 40); });
+  }
+  updateUI();
+}
+
+function go(dir) { goTo(cur + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+
+let ts = 0;
+document.addEventListener('touchstart', e => ts = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = ts - e.changedTouches[0].clientX;
+  if (Math.abs(dx) > 50) go(dx > 0 ? 1 : -1);
+});
+
+buildDots();
+updateUI();
+</script>
+</body>
+</html>
