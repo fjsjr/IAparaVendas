@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/agentes.html", "destination": "https://fernandojsjr.vercel.app/conteudos/agentes-ia-para-vendas/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=agentes", "permanent": false },
+    { "source": "/agentes", "destination": "https://fernandojsjr.vercel.app/conteudos/agentes-ia-para-vendas/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=agentes", "permanent": false },
+    { "source": "/prompts.html", "destination": "https://fernandojsjr.vercel.app/conteudos/agentes-ia-para-vendas/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=prompts", "permanent": false },
+    { "source": "/prompts", "destination": "https://fernandojsjr.vercel.app/conteudos/agentes-ia-para-vendas/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=prompts", "permanent": false },
+    { "source": "/claude-apresentacao.html", "destination": "https://fernandojsjr.vercel.app/conteudos/claude-na-pratica/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=claude", "permanent": false },
+    { "source": "/claude-apresentacao", "destination": "https://fernandojsjr.vercel.app/conteudos/claude-na-pratica/?utm_source=i-apara-vendas&utm_medium=redirect&utm_campaign=claude", "permanent": false }
+  ]
+}
