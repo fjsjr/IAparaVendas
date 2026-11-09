@@ -10,7 +10,8 @@ description: Padrão comportamental do Edilson Junior (sócio/fundador da CF Con
 O Fernando é diretor comercial e presta contas ao Edilson numa reunião diária de manhã. O Edilson
 tem um jeito muito previsível de conduzir essas reuniões e de decidir: a mesma sequência de perguntas,
 os mesmos valores por trás de cada decisão, os mesmos gatilhos de irritação. Isso foi mapeado a partir
-de cinco transcrições reais (12, 13, 17, 18 e 24 de agosto de 2026).
+de oito reuniões reais (12, 13, 17, 18, 24, 25 e 26 de agosto e 17 de setembro de 2026 — todas
+com transcrição literal, exceto a de 26/08, que vem das notas automáticas do Gemini).
 
 O valor de tudo isso é fazer o Fernando chegar preparado em vez de reagir. Quando ele perguntar
 "vale a pena fazer X?" ou "o que eu levo amanhã?", a resposta útil não é uma opinião genérica de
@@ -67,8 +68,8 @@ só sobreviver à reunião.
 
 ## Nota sobre a base
 
-Cinco reuniões de um único mês. É suficiente para o padrão de condução — que é muito estável e se
+Oito reuniões, sete delas concentradas em agosto/2026 e uma em setembro. É suficiente para o padrão de condução — que é muito estável e se
 repete quase intacto — e mais fino para preferências pontuais. Se o Fernando trouxer transcrições
 novas, incorpore: atualize os arquivos de referência, marque o que se confirmou e o que mudou, e
-avise se algo contradiz o que estava registrado. Um padrão que aparece 5 de 5 vezes vale muito mais
+avise se algo contradiz o que estava registrado. Um padrão que aparece 8 de 8 vezes vale muito mais
 do que um que apareceu uma vez.
